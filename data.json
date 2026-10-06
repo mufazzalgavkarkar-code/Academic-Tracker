@@ -1,0 +1,418 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Sarthak Kumar",
+      "email": "sarthak@engineering.edu",
+      "password": "student123",
+      "role": "student",
+      "rollNo": "ENG001",
+      "classId": 101,
+      "address": "123 Main Street, City, State",
+      "phone": "+1234567890",
+      "dateOfBirth": "2002-05-15",
+      "enrollmentYear": 2021,
+      "department": "Computer Science",
+      "createdAt": "2023-01-15T00:00:00Z",
+      "lastLogin": "2025-10-02T08:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Dr. Priya Sharma",
+      "email": "priya.sharma@engineering.edu",
+      "password": "teacher123",
+      "role": "teacher",
+      "employeeId": "EMP001",
+      "department": "Computer Science",
+      "qualification": "PhD in Computer Science",
+      "experience": 8,
+      "address": "456 University Avenue, City, State",
+      "phone": "+1234567891",
+      "dateOfJoining": "2018-07-01",
+      "createdAt": "2023-01-10T00:00:00Z",
+      "lastLogin": "2025-10-02T09:00:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Alice Johnson",
+      "email": "alice@engineering.edu",
+      "password": "student123",
+      "role": "student",
+      "rollNo": "ENG002",
+      "classId": 101,
+      "address": "789 Student Street, City, State",
+      "phone": "+1234567892",
+      "dateOfBirth": "2002-08-22",
+      "enrollmentYear": 2021,
+      "department": "Computer Science",
+      "createdAt": "2023-01-15T00:00:00Z",
+      "lastLogin": "2025-10-01T16:30:00Z"
+    },
+    {
+      "id": 4,
+      "name": "Bob Smith",
+      "email": "bob@engineering.edu",
+      "password": "student123",
+      "role": "student",
+      "rollNo": "ENG003",
+      "classId": 102,
+      "address": "321 College Road, City, State",
+      "phone": "+1234567893",
+      "dateOfBirth": "2002-03-10",
+      "enrollmentYear": 2021,
+      "department": "Mechanical Engineering",
+      "createdAt": "2023-01-15T00:00:00Z",
+      "lastLogin": "2025-09-30T14:15:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Prof. Rajesh Gupta",
+      "email": "rajesh.gupta@engineering.edu",
+      "password": "teacher123",
+      "role": "teacher",
+      "employeeId": "EMP002",
+      "department": "Mechanical Engineering",
+      "qualification": "PhD in Mechanical Engineering",
+      "experience": 12,
+      "address": "654 Faculty Lane, City, State",
+      "phone": "+1234567894",
+      "dateOfJoining": "2015-08-15",
+      "createdAt": "2023-01-10T00:00:00Z",
+      "lastLogin": "2025-10-01T11:20:00Z"
+    }
+  ],
+  "classes": [
+    {
+      "id": 101,
+      "name": "Data Structures and Algorithms",
+      "code": "CS201",
+      "department": "Computer Science",
+      "teacherId": 2,
+      "schedule": "Mon/Wed/Fri 10:00-11:00",
+      "room": "CS-101",
+      "semester": "Fall 2025",
+      "credits": 4,
+      "maxStudents": 60,
+      "description": "Introduction to fundamental data structures and algorithms",
+      "students": [1, 3],
+      "createdAt": "2025-08-01T00:00:00Z"
+    },
+    {
+      "id": 102,
+      "name": "Thermodynamics",
+      "code": "ME305",
+      "department": "Mechanical Engineering",
+      "teacherId": 5,
+      "schedule": "Tue/Thu 11:30-13:00",
+      "room": "ME-201",
+      "semester": "Fall 2025",
+      "credits": 3,
+      "maxStudents": 45,
+      "description": "Principles of thermodynamics and heat transfer",
+      "students": [4],
+      "createdAt": "2025-08-01T00:00:00Z"
+    },
+    {
+      "id": 103,
+      "name": "Digital Logic Design",
+      "code": "EC203",
+      "department": "Electronics",
+      "teacherId": 2,
+      "schedule": "Mon/Wed 14:00-15:30",
+      "room": "EC-102",
+      "semester": "Fall 2025",
+      "credits": 3,
+      "maxStudents": 50,
+      "description": "Introduction to digital logic and computer architecture",
+      "students": [1, 3],
+      "createdAt": "2025-08-01T00:00:00Z"
+    }
+  ],
+  "assignments": [
+    {
+      "id": 1,
+      "title": "Binary Search Tree Implementation",
+      "description": "Implement a complete binary search tree with insertion, deletion, and traversal methods",
+      "classId": 101,
+      "teacherId": 2,
+      "maxMarks": 100,
+      "dueDate": "2025-10-15",
+      "createdDate": "2025-09-01",
+      "instructions": "Submit your code along with documentation and test cases",
+      "submissionFormat": "ZIP file",
+      "status": "active",
+      "submissions": [
+        {
+          "studentId": 1,
+          "submittedAt": "2025-10-01T14:30:00Z",
+          "fileUrl": "/submissions/assignment1_eng001.zip",
+          "marks": 88,
+          "feedback": "Good implementation but missing edge case handling",
+          "gradedAt": "2025-10-02T10:00:00Z",
+          "gradedBy": 2
+        },
+        {
+          "studentId": 3,
+          "submittedAt": "2025-10-02T16:45:00Z",
+          "fileUrl": "/submissions/assignment1_eng002.zip",
+          "marks": null,
+          "feedback": null,
+          "gradedAt": null,
+          "gradedBy": null
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Heat Engine Analysis",
+      "description": "Analyze the efficiency of different heat engine cycles",
+      "classId": 102,
+      "teacherId": 5,
+      "maxMarks": 75,
+      "dueDate": "2025-10-20",
+      "createdDate": "2025-09-15",
+      "instructions": "Provide detailed calculations and graphical analysis",
+      "submissionFormat": "PDF Report",
+      "status": "active",
+      "submissions": [
+        {
+          "studentId": 4,
+          "submittedAt": "2025-10-01T09:15:00Z",
+          "fileUrl": "/submissions/assignment2_eng003.pdf",
+          "marks": 70,
+          "feedback": "Accurate calculations but could improve presentation",
+          "gradedAt": "2025-10-02T15:30:00Z",
+          "gradedBy": 5
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Logic Gate Circuit Design",
+      "description": "Design and simulate logic circuits for given boolean expressions",
+      "classId": 103,
+      "teacherId": 2,
+      "maxMarks": 80,
+      "dueDate": "2025-11-01",
+      "createdDate": "2025-09-20",
+      "instructions": "Use simulation software and provide circuit diagrams",
+      "submissionFormat": "PDF + Simulation files",
+      "status": "active",
+      "submissions": []
+    }
+  ],
+  "practicals": [
+    {
+      "id": 1,
+      "title": "Binary Search Tree Operations Lab",
+      "description": "Implement node insertion, deletion, and inorder traversal in C++",
+      "classId": 101,
+      "teacherId": 2,
+      "dueDate": "2025-10-25",
+      "maxMarks": 50,
+      "status": "pending",
+      "submissions": [
+        {
+          "studentId": 1,
+          "submittedAt": "2025-10-02T11:00:00Z",
+          "fileUrl": "/submissions/practical1_ENG001.zip",
+          "submissionNote": "Completed BST operations with full unit tests",
+          "marks": 46,
+          "feedback": "Clean implementation and good documentation",
+          "gradedAt": "2025-10-03T09:30:00Z",
+          "gradedBy": 2
+        }
+      ],
+      "createdAt": "2025-09-10T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "title": "Heat Conduction & Heat Exchanger Lab",
+      "description": "Measure thermal conductivity and verify Fourier's Law of Heat Conduction",
+      "classId": 102,
+      "teacherId": 5,
+      "dueDate": "2025-10-28",
+      "maxMarks": 50,
+      "status": "pending",
+      "submissions": [
+        {
+          "studentId": 4,
+          "submittedAt": "2025-10-01T15:20:00Z",
+          "fileUrl": "/submissions/practical2_ENG003.zip",
+          "submissionNote": "Observed and tabulated temperature gradient data",
+          "marks": 43,
+          "feedback": "Calculations accurate, graph neatly plotted",
+          "gradedAt": "2025-10-02T16:00:00Z",
+          "gradedBy": 5
+        }
+      ],
+      "createdAt": "2025-09-12T00:00:00Z"
+    },
+    {
+      "id": 3,
+      "title": "Combinational & Sequential Circuits Lab",
+      "description": "Design and verify 4-bit synchronous counter on simulation breadboard",
+      "classId": 103,
+      "teacherId": 2,
+      "dueDate": "2025-11-05",
+      "maxMarks": 50,
+      "status": "pending",
+      "submissions": [],
+      "createdAt": "2025-09-15T00:00:00Z"
+    }
+  ],
+  "attendance": [
+    {
+      "id": 1,
+      "classId": 101,
+      "date": "2025-09-01",
+      "records": [
+        {"studentId": 1, "status": "present"},
+        {"studentId": 3, "status": "present"}
+      ],
+      "markedBy": 2,
+      "markedAt": "2025-09-01T10:05:00Z"
+    },
+    {
+      "id": 2,
+      "classId": 101,
+      "date": "2025-09-03",
+      "records": [
+        {"studentId": 1, "status": "present"},
+        {"studentId": 3, "status": "absent"}
+      ],
+      "markedBy": 2,
+      "markedAt": "2025-09-03T10:05:00Z"
+    },
+    {
+      "id": 3,
+      "classId": 102,
+      "date": "2025-09-02",
+      "records": [
+        {"studentId": 4, "status": "present"}
+      ],
+      "markedBy": 5,
+      "markedAt": "2025-09-02T11:35:00Z"
+    },
+    {
+      "id": 4,
+      "classId": 103,
+      "date": "2025-09-01",
+      "records": [
+        {"studentId": 1, "status": "present"},
+        {"studentId": 3, "status": "present"}
+      ],
+      "markedBy": 2,
+      "markedAt": "2025-09-01T14:05:00Z"
+    },
+    {
+      "id": 5,
+      "classId": 101,
+      "date": "2025-09-06",
+      "records": [
+        {"studentId": 1, "status": "present"},
+        {"studentId": 3, "status": "present"}
+      ],
+      "markedBy": 2,
+      "markedAt": "2025-09-06T10:05:00Z"
+    },
+    {
+      "id": 6,
+      "classId": 102,
+      "date": "2025-09-05",
+      "records": [
+        {"studentId": 4, "status": "absent"}
+      ],
+      "markedBy": 5,
+      "markedAt": "2025-09-05T11:35:00Z"
+    }
+  ],
+  "grades": [
+    {
+      "id": 1,
+      "studentId": 1,
+      "classId": 101,
+      "semester": "Fall 2025",
+      "assignments": [
+        {"assignmentId": 1, "marks": 88, "maxMarks": 100}
+      ],
+      "midtermMarks": 85,
+      "finalMarks": 92,
+      "totalMarks": 88,
+      "grade": "A",
+      "gpa": 3.8
+    },
+    {
+      "id": 2,
+      "studentId": 1,
+      "classId": 103,
+      "semester": "Fall 2025",
+      "assignments": [],
+      "midtermMarks": 80,
+      "finalMarks": 85,
+      "totalMarks": 83,
+      "grade": "B",
+      "gpa": 3.4
+    },
+    {
+      "id": 3,
+      "studentId": 3,
+      "classId": 101,
+      "semester": "Fall 2025",
+      "assignments": [],
+      "midtermMarks": 78,
+      "finalMarks": 82,
+      "totalMarks": 80,
+      "grade": "B",
+      "gpa": 3.2
+    },
+    {
+      "id": 4,
+      "studentId": 4,
+      "classId": 102,
+      "semester": "Fall 2025",
+      "assignments": [
+        {"assignmentId": 2, "marks": 70, "maxMarks": 75}
+      ],
+      "midtermMarks": 82,
+      "finalMarks": 88,
+      "totalMarks": 85,
+      "grade": "A-",
+      "gpa": 3.6
+    }
+  ],
+  "notifications": [
+    {
+      "id": 1,
+      "userId": 1,
+      "title": "Assignment Graded",
+      "message": "Your Binary Search Tree Implementation has been graded. Score: 88/100",
+      "type": "grade",
+      "read": false,
+      "createdAt": "2025-10-02T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "userId": 3,
+      "title": "Assignment Due Soon",
+      "message": "Binary Search Tree Implementation is due in 3 days",
+      "type": "reminder",
+      "read": false,
+      "createdAt": "2025-10-02T08:00:00Z"
+    }
+  ],
+  "settings": {
+    "academic_year": "2025-2026",
+    "current_semester": "Fall 2025",
+    "semester_start": "2025-08-01",
+    "semester_end": "2025-12-15",
+    "attendance_threshold": 75,
+    "grading_scale": {
+      "A": 90,
+      "B": 80,
+      "C": 70,
+      "D": 60,
+      "F": 0
+    }
+  }
+}

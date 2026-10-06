@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Academic Tracker — A simple and smart way to manage attendance, assignments, practicals, and academic progress for colleges, teachers, and students.">
+    <title>Academic Tracker — Manage academics. Track progress. Stay organized.</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        /* ==========================================================================
+           1. DESIGN TOKENS & COLOR PALETTE
+           Palette: Deep Navy / Blue, Clean White, Soft Blue, Subtle Purple Accent
+           ========================================================================== */
+        :root {
+            --navy-dark: #0f172a;
+            --navy-deep: #1e293b;
+            --navy-slate: #334155;
+            --blue-primary: #1d4ed8;
+            --blue-primary-hover: #1e40af;
+            --blue-soft: #eff6ff;
+            --blue-light-border: #dbeafe;
+            --purple-accent: #7c3aed;
+            --purple-soft: #f5f3ff;
+            --emerald-accent: #10b981;
+            --amber-accent: #f59e0b;
+
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-card-subtle: #f1f5f9;
+            --border-subtle: #e2e8f0;
+            --border-hover: #cbd5e1;
+
+            --text-heading: #0f172a;
+            --text-body: #475569;
+            --text-muted: #64748b;
+
+            --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+            --shadow-sm: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+            --shadow-md: 0 10px 25px -3px rgba(15, 23, 42, 0.08), 0 4px 10px -4px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 20px 35px -5px rgba(15, 23, 42, 0.1), 0 8px 16px -6px rgba(15, 23, 42, 0.05);
+            --shadow-glow: 0 0 35px -5px rgba(29, 78, 216, 0.2);
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 22px;
+            --radius-full: 9999px;
+
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+            --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Dark mode support */
+        [data-theme="dark"] {
+            --navy-dark: #f8fafc;
+            --navy-deep: #cbd5e1;
+            --bg-page: #0b0f19;
+            --bg-card: #111827;
+            --bg-card-subtle: #1a2234;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.16);
+            --text-heading: #f8fafc;
+            --text-body: #cbd5e1;
+            --text-muted: #94a3b8;
+            --blue-soft: rgba(29, 78, 216, 0.12);
+            --purple-soft: rgba(124, 58, 237, 0.12);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           2. BASE RESETS & UTILITIES
+           ========================================================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color var(--transition-smooth), color var(--transition-smooth);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-heading);
+            font-family: var(--font-display);
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 3.5rem auto;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.9rem;
+            background: var(--blue-soft);
+            color: var(--blue-primary);
+            border: 1px solid var(--blue-light-border);
+            border-radius: var(--radius-full);
+            font-size: 0.825rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.9rem;
+        }
+
+        [data-theme="dark"] .section-badge {
+            border-color: rgba(59, 130, 246, 0.25);
+        }
+
+        .section-header h2 {
+            font-size: 2.35rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .section-header p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* Subtle background glow elements */
+        .ambient-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-top-right {
+            top: 2%;
+            right: -100px;
+            background: var(--blue-primary);
+        }
+
+        .glow-middle-left {
+            top: 35%;
+            left: -150px;
+            background: var(--purple-accent);
+        }
+
+        /* ==========================================================================
+           3. BUTTONS
+           ========================================================================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            font-family: var(--font-main);
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.75rem 1.45rem;
+            border-radius: var(--radius-md);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background-color: var(--blue-primary);
+            color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(29, 78, 216, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--blue-primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(29, 78, 216, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-card);
+            color: var(--navy-dark) !important;
+            border-color: var(--border-subtle);
+            box-shadow: var(--shadow-xs);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-card-subtle);
+            border-color: var(--border-hover);
+            color: var(--blue-primary) !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-lg {
+            padding: 0.9rem 1.85rem;
+            font-size: 1.05rem;
+            border-radius: var(--radius-lg);
+        }
+
+        .btn-sm {
+            padding: 0.45rem 1rem;
+            font-size: 0.875rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* ==========================================================================
+           4. GLASSMORHPIC NAVBAR
+           ========================================================================== */
+        .navbar-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-subtle);
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+            transition: all var(--transition-fast);
+        }
+
+        [data-theme="dark"] .navbar-header {
+            background: rgba(11, 15, 25, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        /* Logo */
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.35rem;
+            color: var(--text-heading);
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--blue-primary) 0%, var(--purple-accent) 100%);
+            color: #ffffff;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            box-shadow: 0 4px 10px rgba(29, 78, 216, 0.25);
+        }
+
+        /* Nav Menu (Strictly: Home, Features, About, Contact) */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2.25rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--text-body);
+            position: relative;
+            padding: 0.35rem 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: var(--blue-primary);
+            transition: width var(--transition-fast);
+            border-radius: 2px;
+        }
+
+        .nav-link:hover {
+            color: var(--blue-primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Nav Actions */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        /* Subtle Theme Switch */
+        .theme-toggle-btn {
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-heading);
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all var(--transition-fast);
+        }
+
+        .theme-toggle-btn:hover {
+            color: var(--blue-primary);
+            border-color: var(--blue-primary);
+        }
+
+        /* Hamburger Toggle Button */
+        .hamburger-btn {
+            display: none;
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-heading);
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            font-size: 1.15rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+
+        /* Mobile Drawer */
+        .mobile-drawer {
+            display: none;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mobile-drawer.active {
+            display: block;
+            animation: slideDown 0.22s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-menu-mobile {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-link-mobile {
+            display: block;
+            font-size: 1.05rem;
+            font-weight: 600;
+            padding: 0.4rem 0;
+            color: var(--text-heading);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* ==========================================================================
+           5. HERO SECTION
+           ========================================================================== */
+        .hero-section {
+            position: relative;
+            padding: 5rem 0 4.5rem 0;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            align-items: center;
+            gap: 3.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            line-height: 1.12;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.03em;
+            color: var(--text-heading);
+        }
+
+        .hero-title .highlight-text {
+            background: linear-gradient(135deg, var(--blue-primary) 0%, var(--purple-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-supporting-text {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+            margin-bottom: 2.25rem;
+            max-width: 520px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-tagline-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 1.1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-xs);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--navy-slate);
+        }
+
+        [data-theme="dark"] .hero-tagline-bar {
+            color: var(--text-muted);
+        }
+
+        .hero-tagline-bar i {
+            color: var(--blue-primary);
+        }
+
+        /* Hero Right: Academic Dashboard Preview */
+        .hero-preview-wrapper {
+            position: relative;
+        }
+
+        .hero-preview-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            height: 85%;
+            background: linear-gradient(135deg, rgba(29, 78, 216, 0.25), rgba(124, 58, 237, 0.25));
+            filter: blur(60px);
+            border-radius: var(--radius-xl);
+            z-index: 0;
+        }
+
+        .dashboard-preview-card {
+            position: relative;
+            z-index: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+            animation: gentleFloat 5s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-7px); }
+        }
+
+        .dashboard-preview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow), var(--shadow-lg);
+        }
+
+        .preview-window-header {
+            background: var(--bg-card-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .window-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .window-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-1 { background-color: #ef4444; }
+        .dot-2 { background-color: #f59e0b; }
+        .dot-3 { background-color: #10b981; }
+
+        .preview-window-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .preview-window-body {
+            padding: 1.4rem;
+        }
+
+        /* Mock Stats Bar */
+        .preview-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .metric-mini-box {
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 0.85rem;
+        }
+
+        .metric-mini-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-mini-val {
+            font-size: 1.25rem;
+            font-weight: 800;
+            font-family: var(--font-display);
+            color: var(--text-heading);
+        }
+
+        .metric-mini-status {
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 0.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .status-good { color: var(--emerald-accent); }
+        .status-info { color: var(--blue-primary); }
+
+        /* Course Cards Inside Preview */
+        .preview-course-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .preview-course-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .course-info h5 {
+            font-size: 0.85rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .course-info span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .course-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--radius-full);
+            background: var(--blue-soft);
+            color: var(--blue-primary);
+            white-space: nowrap;
+        }
+
+        /* Floating Chips */
+        .preview-floating-chip {
+            position: absolute;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            padding: 0.65rem 1.1rem;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            z-index: 2;
+            animation: floatSlow 4s ease-in-out infinite;
+        }
+
+        .chip-left {
+            bottom: -15px;
+            left: -20px;
+            animation-delay: 0.5s;
+        }
+
+        .chip-right {
+            top: 25px;
+            right: -20px;
+            animation-delay: 2s;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* ==========================================================================
+           6. QUICK ROLE SELECTION SECTION ("Who are you?")
+           ========================================================================== */
+        .role-section {
+            padding: 5.5rem 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+
+        .role-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .role-card {
+            background: var(--bg-page);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 2.75rem 2.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all var(--transition-smooth);
+            position: relative;
+            box-shadow: var(--shadow-xs);
+        }
+
+        .role-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--blue-primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .role-header {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .role-icon-box {
+            width: 58px;
+            height: 58px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .role-icon-teacher {
+            background: var(--blue-soft);
+            color: var(--blue-primary);
+        }
+
+        .role-icon-student {
+            background: var(--purple-soft);
+            color: var(--purple-accent);
+        }
+
+        .role-title-box h3 {
+            font-size: 1.65rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .role-title-box p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        .role-features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            margin-bottom: 2.25rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .role-features-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-heading);
+        }
+
+        .role-features-list li i {
+            color: var(--emerald-accent);
+            font-size: 0.9rem;
+        }
+
+        /* ==========================================================================
+           7. FEATURES SECTION
+           ========================================================================== */
+        .features-section {
+            padding: 6.5rem 0;
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.75rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.85rem;
+            box-shadow: var(--shadow-xs);
+            transition: all var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(29, 78, 216, 0.4);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            background: var(--blue-soft);
+            color: var(--blue-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 1.25rem;
+            transition: transform var(--transition-fast);
+        }
+
+        .feature-card:hover .feature-icon-wrapper {
+            transform: scale(1.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            margin-bottom: 0;
+        }
+
+        /* ==========================================================================
+           8. HOW IT WORKS SECTION
+           ========================================================================== */
+        .how-section {
+            padding: 6.5rem 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+
+        .steps-timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.25rem;
+            position: relative;
+        }
+
+        .step-item-card {
+            background: var(--bg-page);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            transition: all var(--transition-smooth);
+        }
+
+        .step-item-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--blue-primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .step-number-badge {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--blue-primary);
+            background: var(--blue-soft);
+            border: 1px solid var(--blue-light-border);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.35rem auto;
+        }
+
+        [data-theme="dark"] .step-number-badge {
+            border-color: rgba(59, 130, 246, 0.25);
+        }
+
+        .step-item-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 0.65rem;
+        }
+
+        .step-item-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        /* ==========================================================================
+           9. BENEFITS SECTION ("About")
+           ========================================================================== */
+        .benefits-section {
+            padding: 6.5rem 0;
+            position: relative;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .benefit-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-xs);
+            display: flex;
+            gap: 1.15rem;
+            align-items: flex-start;
+            transition: all var(--transition-smooth);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .benefit-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: var(--purple-soft);
+            color: var(--purple-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        .benefit-text h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .benefit-text p {
+            font-size: 0.885rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            margin-bottom: 0;
+        }
+
+        /* ==========================================================================
+           10. FINAL CALL TO ACTION (CTA)
+           ========================================================================== */
+        .cta-section {
+            padding: 5.5rem 0;
+            position: relative;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-radius: var(--radius-xl);
+            padding: 4.5rem 3rem;
+            text-align: center;
+            color: #ffffff;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(29, 78, 216, 0.25) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .cta-box h2 {
+            color: #ffffff;
+            font-size: 2.65rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-box p {
+            color: #94a3b8;
+            font-size: 1.15rem;
+            max-width: 600px;
+            margin: 0 auto 2.25rem auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button-wrap {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ==========================================================================
+           11. FOOTER
+           ========================================================================== */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-subtle);
+            padding: 4.5rem 0 2rem 0;
+            position: relative;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+            gap: 3rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .footer-col-about p {
+            color: var(--text-muted);
+            font-size: 0.925rem;
+            line-height: 1.65;
+            margin: 1.25rem 0 1.5rem 0;
+            max-width: 320px;
+        }
+
+        .footer-col h4 {
+            font-size: 1.05rem;
+            margin-bottom: 1.35rem;
+        }
+
+        .footer-links-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links-list a {
+            color: var(--text-muted);
+            font-size: 0.925rem;
+            transition: color var(--transition-fast);
+        }
+
+        .footer-links-list a:hover {
+            color: var(--blue-primary);
+        }
+
+        .footer-contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            font-size: 0.925rem;
+            color: var(--text-muted);
+        }
+
+        .footer-contact-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .footer-contact-list i {
+            color: var(--blue-primary);
+            margin-top: 0.25rem;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ==========================================================================
+           12. SCROLL REVEAL ANIMATIONS
+           ========================================================================== */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-on-scroll.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================================================
+           13. RESPONSIVE DESIGN (BREAKPOINTS)
+           ========================================================================== */
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 2.85rem;
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2.5rem;
+            }
+        }
+
+        @media (max-width: 860px) {
+            .nav-menu {
+                display: none;
+            }
+            .hamburger-btn {
+                display: flex;
+            }
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 3.5rem;
+                text-align: center;
+            }
+            .hero-supporting-text {
+                margin: 0 auto 2.25rem auto;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .hero-tagline-bar {
+                margin: 0 auto;
+            }
+            .preview-floating-chip {
+                display: none; /* Hide floating chips on mobile to prevent overflow */
+            }
+            .role-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1.75rem;
+            }
+            .steps-timeline-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+            .cta-box {
+                padding: 3rem 1.5rem;
+            }
+            .cta-box h2 {
+                font-size: 2.1rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-title {
+                font-size: 2.35rem;
+            }
+            .hero-section {
+                padding: 3.5rem 0;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient background light glows -->
+    <div class="ambient-glow glow-top-right"></div>
+    <div class="ambient-glow glow-middle-left"></div>
+
+    <!-- ==========================================================================
+         1. MODERN GLASSMORHPIC NAVBAR
+         ========================================================================== -->
+    <header class="navbar-header" id="navbarHeader">
+        <div class="container">
+            <nav class="navbar" aria-label="Main Navigation">
+                <!-- Academic Tracker Logo / Icon -->
+                <a href="#" class="brand-logo" id="navLogo">
+                    <div class="brand-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <span>Academic Tracker</span>
+                </a>
+
+                <!-- Clean Navigation Links (Home, Features, About, Contact) -->
+                <ul class="nav-menu">
+                    <li><a href="#hero" class="nav-link">Home</a></li>
+                    <li><a href="#features" class="nav-link">Features</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+
+                <!-- Right Actions: Theme Toggle & Login Button -->
+                <div class="nav-actions">
+                    <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle theme" title="Switch Theme">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                    </button>
+
+                    <!-- Login Button pointing to existing main.html -->
+                    <a href="main.html" class="btn btn-primary btn-sm" id="navLoginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+
+                    <!-- Hamburger Button for Mobile -->
+                    <button type="button" class="hamburger-btn" id="mobileMenuBtn" aria-label="Toggle mobile menu" aria-expanded="false">
+                        <i class="fas fa-bars" id="menuIcon"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div class="mobile-drawer" id="mobileDrawer">
+            <ul class="nav-menu-mobile">
+                <li><a href="#hero" class="nav-link-mobile">Home</a></li>
+                <li><a href="#features" class="nav-link-mobile">Features</a></li>
+                <li><a href="#about" class="nav-link-mobile">About</a></li>
+                <li><a href="#contact" class="nav-link-mobile">Contact</a></li>
+            </ul>
+            <a href="main.html" class="btn btn-primary btn-block">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <!-- ==========================================================================
+             2. HERO SECTION
+             ========================================================================== -->
+        <section class="hero-section" id="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <!-- Hero Content Left -->
+                    <div class="hero-content reveal-on-scroll">
+                        <h1 class="hero-title">
+                            Academic Tracker
+                        </h1>
+
+                        <p class="hero-supporting-text">
+                            A simple and smart way to manage attendance, assignments, practicals and academic progress.
+                        </p>
+
+                        <!-- Clear CTA Buttons -->
+                        <div class="hero-buttons">
+                            <a href="main.html" class="btn btn-primary btn-lg" id="heroLoginBtn">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span>Login</span>
+                            </a>
+                            <a href="#features" class="btn btn-secondary btn-lg" id="heroExploreBtn">
+                                <span>Explore Features</span>
+                                <i class="fas fa-arrow-down"></i>
+                            </a>
+                        </div>
+
+                        <!-- Core Value Proposition -->
+                        <div class="hero-tagline-bar">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Manage academics. Track progress. Stay organized.</span>
+                        </div>
+                    </div>
+
+                    <!-- Hero Academic Illustration / Dashboard Preview Right -->
+                    <div class="hero-preview-wrapper reveal-on-scroll">
+                        <div class="hero-preview-glow"></div>
+
+                        <!-- Pure Visual Dashboard Preview Card -->
+                        <div class="dashboard-preview-card" aria-label="Dashboard Preview">
+                            <div class="preview-window-header">
+                                <div class="window-dots">
+                                    <div class="window-dot dot-1"></div>
+                                    <div class="window-dot dot-2"></div>
+                                    <div class="window-dot dot-3"></div>
+                                </div>
+                                <div class="preview-window-title">
+                                    <i class="fas fa-chart-line"></i> Academic Portal Preview
+                                </div>
+                                <div style="font-size: 0.72rem; color: var(--emerald-accent); font-weight: 700;">
+                                    ● Active
+                                </div>
+                            </div>
+
+                            <div class="preview-window-body">
+                                <!-- Metrics Row: Attendance, Assignments, Practicals -->
+                                <div class="preview-metrics-grid">
+                                    <div class="metric-mini-box">
+                                        <div class="metric-mini-label">
+                                            <span>Attendance</span>
+                                            <i class="fas fa-calendar-check" style="color: var(--blue-primary);"></i>
+                                        </div>
+                                        <div class="metric-mini-val">89.5%</div>
+                                        <div class="metric-mini-status status-good">
+                                            <i class="fas fa-check"></i> On Track (>75%)
+                                        </div>
+                                    </div>
+
+                                    <div class="metric-mini-box">
+                                        <div class="metric-mini-label">
+                                            <span>Assignments</span>
+                                            <i class="fas fa-tasks" style="color: var(--purple-accent);"></i>
+                                        </div>
+                                        <div class="metric-mini-val">8 / 10</div>
+                                        <div class="metric-mini-status status-info">
+                                            <i class="fas fa-clock"></i> 2 Pending
+                                        </div>
+                                    </div>
+
+                                    <div class="metric-mini-box">
+                                        <div class="metric-mini-label">
+                                            <span>Practical Marks</span>
+                                            <i class="fas fa-flask" style="color: var(--emerald-accent);"></i>
+                                        </div>
+                                        <div class="metric-mini-val">28 / 30</div>
+                                        <div class="metric-mini-status status-good">
+                                            <i class="fas fa-award"></i> Grade A+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Course Cards Preview -->
+                                <div class="preview-course-list">
+                                    <div class="preview-course-item">
+                                        <div class="course-info">
+                                            <h5>Database Management Systems</h5>
+                                            <span>Prof. Priya Sharma • Attendance: 92%</span>
+                                        </div>
+                                        <span class="course-badge">Performance: 9.4</span>
+                                    </div>
+
+                                    <div class="preview-course-item">
+                                        <div class="course-info">
+                                            <h5>Data Structures & Algorithms</h5>
+                                            <span>Prof. Robert Chen • Attendance: 88%</span>
+                                        </div>
+                                        <span class="course-badge">Performance: 9.1</span>
+                                    </div>
+
+                                    <div class="preview-course-item">
+                                        <div class="course-info">
+                                            <h5>Operating Systems & Lab</h5>
+                                            <span>Prof. Anita Desai • Attendance: 90%</span>
+                                        </div>
+                                        <span class="course-badge">Performance: 9.5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Badges for Visual Flair -->
+                        <div class="preview-floating-chip chip-left">
+                            <i class="fas fa-shield-alt" style="color: var(--emerald-accent);"></i>
+                            <span>Verified Term-Work</span>
+                        </div>
+
+                        <div class="preview-floating-chip chip-right">
+                            <i class="fas fa-user-graduate" style="color: var(--blue-primary);"></i>
+                            <span>CGPA: 9.35</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             3. QUICK ROLE SELECTION ("Who are you?")
+             ========================================================================== -->
+        <section class="role-section" id="roles">
+            <div class="container">
+                <div class="section-header reveal-on-scroll">
+                    <span class="section-badge"><i class="fas fa-user-circle"></i> Tailored Experience</span>
+                    <h2>Who are you?</h2>
+                    <p>Select your role to access dedicated tools built for your academic workflow.</p>
+                </div>
+
+                <div class="role-cards-grid">
+                    <!-- Teacher Card -->
+                    <div class="role-card reveal-on-scroll">
+                        <div>
+                            <div class="role-header">
+                                <div class="role-icon-box role-icon-teacher">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                </div>
+                                <div class="role-title-box">
+                                    <h3>Teacher</h3>
+                                    <p>Faculty & Course Instructors</p>
+                                </div>
+                            </div>
+
+                            <ul class="role-features-list">
+                                <li><i class="fas fa-check"></i> Manage students</li>
+                                <li><i class="fas fa-check"></i> Track attendance</li>
+                                <li><i class="fas fa-check"></i> Manage assignments and practicals</li>
+                                <li><i class="fas fa-check"></i> Monitor academic performance</li>
+                            </ul>
+                        </div>
+
+                        <!-- Links directly to existing login -->
+                        <a href="main.html" class="btn btn-primary btn-block" id="loginAsTeacherBtn">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Login as Teacher</span>
+                        </a>
+                    </div>
+
+                    <!-- Student Card -->
+                    <div class="role-card reveal-on-scroll">
+                        <div>
+                            <div class="role-header">
+                                <div class="role-icon-box role-icon-student">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                                <div class="role-title-box">
+                                    <h3>Student</h3>
+                                    <p>Undergraduate & Postgraduate</p>
+                                </div>
+                            </div>
+
+                            <ul class="role-features-list">
+                                <li><i class="fas fa-check"></i> View attendance</li>
+                                <li><i class="fas fa-check"></i> Check assignments</li>
+                                <li><i class="fas fa-check"></i> View practical marks</li>
+                                <li><i class="fas fa-check"></i> Track academic progress</li>
+                            </ul>
+                        </div>
+
+                        <!-- Links directly to existing login -->
+                        <a href="main.html" class="btn btn-primary btn-block" id="loginAsStudentBtn" style="background: var(--purple-accent); box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Login as Student</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             4. FEATURES SECTION
+             ========================================================================== -->
+        <section class="features-section" id="features">
+            <div class="container">
+                <div class="section-header reveal-on-scroll">
+                    <span class="section-badge"><i class="fas fa-th-large"></i> Everything In One Place</span>
+                    <h2>Comprehensive Academic Features</h2>
+                    <p>Designed to simplify academic administration, tracking, and evaluation.</p>
+                </div>
+
+                <div class="features-grid">
+                    <!-- Feature 1: Attendance Tracking -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3>Attendance Tracking</h3>
+                        <p>Calculate lecture and practical attendance with real-time percentage indicators and alerts.</p>
+                    </div>
+
+                    <!-- Feature 2: Assignment Management -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon-wrapper" style="background: var(--purple-soft); color: var(--purple-accent);">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h3>Assignment Management</h3>
+                        <p>Organize course assignments, submission deadlines, and evaluation feedback effortlessly.</p>
+                    </div>
+
+                    <!-- Feature 3: Practical Marks -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon-wrapper" style="background: rgba(16, 185, 129, 0.12); color: var(--emerald-accent);">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h3>Practical Marks</h3>
+                        <p>Record lab experiment completions, viva marks, and continuous assessment scores.</p>
+                    </div>
+
+                    <!-- Feature 4: Student Records -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon-wrapper" style="background: rgba(245, 158, 11, 0.12); color: var(--amber-accent);">
+                            <i class="fas fa-address-card"></i>
+                        </div>
+                        <h3>Student Records</h3>
+                        <p>Maintain centralized student profiles, roll numbers, divisions, and enrollment details.</p>
+                    </div>
+
+                    <!-- Feature 5: Performance Tracking -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon-wrapper" style="background: rgba(6, 182, 212, 0.12); color: #06b6d4;">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Performance Tracking</h3>
+                        <p>Monitor continuous progress, test marks, and academic semester trends in one dashboard.</p>
+                    </div>
+
+                    <!-- Feature 6: Course Management -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon-wrapper" style="background: rgba(244, 63, 94, 0.12); color: #f43f5e;">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3>Course Management</h3>
+                        <p>Structured course catalogs, teacher allocations, and syllabus milestones made clear.</p>
+                    </div>
+
+                    <!-- Feature 7: Excel Import/Export -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon-wrapper" style="background: rgba(16, 185, 129, 0.12); color: var(--emerald-accent);">
+                            <i class="fas fa-file-excel"></i>
+                        </div>
+                        <h3>Excel Import/Export</h3>
+                        <p>Easily import and export marks, attendance sheets, and academic reports in CSV/Excel formats.</p>
+                    </div>
+
+                    <!-- Feature 8: Secure Login -->
+                    <div class="feature-card reveal-on-scroll">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Secure Login</h3>
+                        <p>Protected role-based authentication ensuring privacy and secure record management.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             5. HOW IT WORKS
+             ========================================================================== -->
+        <section class="how-section" id="how-it-works">
+            <div class="container">
+                <div class="section-header reveal-on-scroll">
+                    <span class="section-badge"><i class="fas fa-route"></i> 3 Simple Steps</span>
+                    <h2>How It Works</h2>
+                    <p>A straightforward workflow designed for students and faculty alike.</p>
+                </div>
+
+                <div class="steps-timeline-grid">
+                    <!-- Step 01 -->
+                    <div class="step-item-card reveal-on-scroll">
+                        <div class="step-number-badge">01</div>
+                        <h3>01 — Login</h3>
+                        <p>Choose your role and securely log in.</p>
+                    </div>
+
+                    <!-- Step 02 -->
+                    <div class="step-item-card reveal-on-scroll">
+                        <div class="step-number-badge">02</div>
+                        <h3>02 — Manage</h3>
+                        <p>Teachers manage academic records while students view their progress.</p>
+                    </div>
+
+                    <!-- Step 03 -->
+                    <div class="step-item-card reveal-on-scroll">
+                        <div class="step-number-badge">03</div>
+                        <h3>03 — Track</h3>
+                        <p>Monitor attendance, assignments, practicals and overall academic performance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             6. BENEFITS SECTION ("About")
+             ========================================================================== -->
+        <section class="benefits-section" id="about">
+            <div class="container">
+                <div class="section-header reveal-on-scroll">
+                    <span class="section-badge"><i class="fas fa-check-double"></i> Key Advantages</span>
+                    <h2>Why Choose Academic Tracker?</h2>
+                    <p>Purpose-built to eliminate paperwork and bring clarity to college academics.</p>
+                </div>
+
+                <div class="benefits-grid">
+                    <!-- Benefit 1 -->
+                    <div class="benefit-card reveal-on-scroll">
+                        <div class="benefit-icon">
+                            <i class="fas fa-file-signature"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>Less paperwork</h4>
+                            <p>Eliminate manual paper registers, physical forms, and scattered spreadsheets.</p>
+                        </div>
+                    </div>
+
+                    <!-- Benefit 2 -->
+                    <div class="benefit-card reveal-on-scroll">
+                        <div class="benefit-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>Easy academic monitoring</h4>
+                            <p>Instant visual oversight of lecture attendance, labs, and student deliverables.</p>
+                        </div>
+                    </div>
+
+                    <!-- Benefit 3 -->
+                    <div class="benefit-card reveal-on-scroll">
+                        <div class="benefit-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>Centralized student records</h4>
+                            <p>All student information, roll numbers, and historical marks in one place.</p>
+                        </div>
+                    </div>
+
+                    <!-- Benefit 4 -->
+                    <div class="benefit-card reveal-on-scroll">
+                        <div class="benefit-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>Faster attendance management</h4>
+                            <p>Mark attendance quickly with automatic calculation of eligibility percentages.</p>
+                        </div>
+                    </div>
+
+                    <!-- Benefit 5 -->
+                    <div class="benefit-card reveal-on-scroll">
+                        <div class="benefit-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>Better performance visibility</h4>
+                            <p>Transparent internal marks and continuous evaluations accessible at any time.</p>
+                        </div>
+                    </div>
+
+                    <!-- Benefit 6 -->
+                    <div class="benefit-card reveal-on-scroll">
+                        <div class="benefit-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>Simple student access</h4>
+                            <p>Students can check their deadlines, practical sign-offs, and attendance from any device.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             7. FINAL CTA
+             ========================================================================== -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-box reveal-on-scroll">
+                    <h2>Make academic tracking simple.</h2>
+                    <p>Everything you need to organize and monitor academic progress in one place.</p>
+                    <div class="cta-button-wrap">
+                        <a href="main.html" class="btn btn-primary btn-lg" id="finalCtaBtn">
+                            <i class="fas fa-rocket"></i>
+                            <span>Get Started</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==========================================================================
+         8. FOOTER
+         ========================================================================== -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Col 1: About -->
+                <div class="footer-col-about">
+                    <a href="#" class="brand-logo" style="margin-bottom: 0.5rem;">
+                        <div class="brand-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <span>Academic Tracker</span>
+                    </a>
+                    <p>
+                        A simple, smart, and reliable academic platform for colleges, teachers, and students to manage attendance, assignments, and performance.
+                    </p>
+                </div>
+
+                <!-- Col 2: Quick Links -->
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#roles">Who are you?</a></li>
+                        <li><a href="main.html">Login</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Features -->
+                <div class="footer-col">
+                    <h4>Features</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="#features">Attendance Tracking</a></li>
+                        <li><a href="#features">Assignment Management</a></li>
+                        <li><a href="#features">Practical Marks</a></li>
+                        <li><a href="#features">Performance Tracking</a></li>
+                        <li><a href="#features">Excel Import/Export</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Contact -->
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul class="footer-contact-list">
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <span>support@academictracker.edu</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <span>+1 (555) 234-5678</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-university"></i>
+                            <span>College Campus, Academic Block A</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p>&copy; 2026 Academic Tracker. All rights reserved.</p>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">
+                    Manage academics. Track progress. Stay organized.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================================================
+         LIGHTWEIGHT INTERACTIVE JAVASCRIPT
+         ========================================================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. THEME SWITCHER
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const themeIcon = document.getElementById('themeIcon');
+            const savedTheme = localStorage.getItem('theme') || 'light';
+
+            function applyTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                if (theme === 'dark') {
+                    themeIcon.className = 'fas fa-sun';
+                    themeToggleBtn.setAttribute('title', 'Switch to Light Mode');
+                } else {
+                    themeIcon.className = 'fas fa-moon';
+                    themeToggleBtn.setAttribute('title', 'Switch to Dark Mode');
+                }
+            }
+
+            applyTheme(savedTheme);
+
+            themeToggleBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme') || 'light';
+                applyTheme(current === 'dark' ? 'light' : 'dark');
+            });
+
+            // 2. MOBILE DRAWER TOGGLE
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileDrawer = document.getElementById('mobileDrawer');
+            const menuIcon = document.getElementById('menuIcon');
+
+            function toggleMobileMenu() {
+                const isOpen = mobileDrawer.classList.contains('active');
+                if (isOpen) {
+                    mobileDrawer.classList.remove('active');
+                    menuIcon.className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                } else {
+                    mobileDrawer.classList.add('active');
+                    menuIcon.className = 'fas fa-times';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'true');
+                }
+            }
+
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+            document.querySelectorAll('.nav-link-mobile').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileDrawer.classList.remove('active');
+                    menuIcon.className = 'fas fa-bars';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            // 3. SMOOTH SCROLL FOR ANCHOR LINKS (Respecting sticky navbar height)
+            const navbarHeader = document.getElementById('navbarHeader');
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    if (!targetId || targetId === '#') return;
+
+                    const targetElem = document.querySelector(targetId);
+                    if (targetElem) {
+                        e.preventDefault();
+                        const navOffset = navbarHeader ? navbarHeader.offsetHeight : 72;
+                        const elemPos = targetElem.getBoundingClientRect().top;
+                        const scrollPos = elemPos + window.pageYOffset - navOffset - 12;
+
+                        window.scrollTo({
+                            top: scrollPos,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // 4. SCROLL REVEAL ANIMATIONS (IntersectionObserver)
+            const revealElements = document.querySelectorAll('.reveal-on-scroll');
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('revealed');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -40px 0px'
+                });
+
+                revealElements.forEach(el => observer.observe(el));
+            } else {
+                revealElements.forEach(el => el.classList.add('revealed'));
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Management - Engineering Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* [SHARED CSS BLOCK START] - POLISHED DEEP TEAL THEME */
+        :root {
+            /* Deep Teal & Soft Grey Theme */
+            --primary-color: #00796B; 
+            --secondary-color: #37474F; 
+            --background-color: #F0F4F8; 
+            --text-color: #263238; 
+            --card-bg: #ffffff;
+            --border-color: #CFD8DC; 
+            --shadow: 0 6px 12px rgba(0,0,0,0.08); 
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --error-color: #F44336;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4DB6AC; 
+            --secondary-color: #1A1E20; 
+            --background-color: #263238; 
+            --text-color: #CFD8DC; 
+            --card-bg: #37474F; 
+            --border-color: #546E7A; 
+            --shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+        }
+
+        /* --- Application Layout (Sidebar/Main Content) --- */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+
+        .logo-section {
+            padding: 0 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item a {
+            display: flex; 
+            align-items: center;
+            padding: 0.85rem 1.5rem; 
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .nav-item a i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .nav-item a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item .active {
+            background-color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2.5rem; 
+            width: calc(100% - 250px);
+        }
+
+        /* --- Components & Utility Styles --- */
+        .top-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.25rem; 
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .welcome-message {
+            display: flex; 
+            align-items: baseline;
+            gap: 15px;
+        }
+        
+        .welcome-message h1 {
+            font-size: 2rem;
+            font-weight: 300;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 2rem; 
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th, .data-table td {
+            padding: 1.1rem 1rem; 
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background-color: var(--background-color);
+            font-weight: 600;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: rgba(0, 121, 107, 0.05); 
+        }
+
+        .btn {
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem; 
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex; 
+            align-items: center;
+            gap: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary { background-color: var(--primary-color); }
+        .btn-secondary { background-color: var(--secondary-color); }
+        .btn-success { background-color: var(--success-color); }
+        .btn-danger { background-color: var(--error-color); }
+
+        .badge {
+            padding: 0.4em 0.8em; 
+            border-radius: 4px;
+            font-weight: 600;
+            line-height: 1.2;
+            color: white;
+        }
+
+        .badge-success { background-color: var(--success-color); }
+        .badge-warning { background-color: var(--warning-color); }
+        .badge-danger { background-color: var(--error-color); }
+        .badge-info { background-color: var(--primary-color); }
+        .badge-secondary { background-color: var(--secondary-color); }
+        
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.4rem; 
+            margin-left: 0.75rem;
+            transition: color 0.2s;
+        }
+
+        .icon-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        .form-control {
+            padding: 0.7rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        /* [SHARED CSS BLOCK END] */
+
+        /* CLASSES SPECIFIC STYLES */
+        .class-status-details {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .class-status-box {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); 
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 3rem; 
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px; 
+            box-shadow: var(--shadow);
+            color: var(--text-color);
+            max-height: 90vh; 
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem; 
+        }
+        
+        .modal-header h3 {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container" data-theme="light">
+        <aside class="sidebar">
+            <div class="logo-section"><h2>Engg Portal</h2></div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html" id="nav-dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li class="nav-item"><a href="profile.html" id="nav-profile"><i class="fas fa-user-circle"></i>Profile</a></li>
+                <li class="nav-item"><a href="classes.html" id="nav-classes" class="active"><i class="fas fa-chalkboard-teacher"></i>Classes</a></li>
+                <li class="nav-item"><a href="assignments.html" id="nav-assignments"><i class="fas fa-tasks"></i>Assignments</a></li>
+                <li class="nav-item"><a href="practicals.html" id="nav-practicals"><i class="fas fa-flask"></i>Practicals</a></li>
+                <li class="nav-item"><a href="attendance.html" id="nav-attendance"><i class="fas fa-calendar-check"></i>Attendance</a></li>
+                <li class="nav-item"><a href="reports.html" id="nav-reports"><i class="fas fa-chart-line"></i>Reports</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-navbar">
+                <div class="welcome-message">
+                    <h1>Class Management</h1>
+                    <span id="userRoleBadge" class="role-badge">Role</span>
+                </div>
+                <div class="action-group">
+                    <button id="themeToggle" class="icon-btn" title="Toggle Dark/Light Theme"><i class="fas fa-sun"></i></button>
+                    <button id="logoutBtn" class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+            
+            <div id="teacherView" style="display: none;">
+                <div class="card-header">
+                    <h2>Classes I Teach</h2>
+                    <button class="btn btn-primary" onclick="document.getElementById('newClassModal').classList.add('active')"><i class="fas fa-plus-circle"></i> Create New Class</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Class Name</th>
+                                <th>Course Code</th>
+                                <th>Schedule</th>
+                                <th id="tableHeaderStudents">Students</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="classesTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Student Manager Modal -->
+            <div id="studentManagerModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modalClassTitle">Students in [Class Name]</h3>
+                        <button class="icon-btn" onclick="document.getElementById('studentManagerModal').classList.remove('active')"><i class="fas fa-times"></i></button>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <form id="addStudentForm" style="display: flex; gap: 10px;">
+                            <input type="text" id="studentRollNo" class="form-control" placeholder="Enter Student Roll No (e.g., E2021004)" required style="flex-grow: 1;">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-user-plus"></i> Add Student</button>
+                        </form>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Roll No</th>
+                                    <th>Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentListTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Class Modal -->
+            <div id="newClassModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Create New Class</h3>
+                        <button class="icon-btn" onclick="document.getElementById('newClassModal').classList.remove('active')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <form id="newClassForm">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div style="grid-column: 1 / -1;">
+                                <label for="className">Class Name</label>
+                                <input type="text" id="className" class="form-control" required>
+                            </div>
+                            <div>
+                                <label for="classCode">Course Code</label>
+                                <input type="text" id="classCode" class="form-control" required>
+                            </div>
+                            <div>
+                                <label for="classDepartment">Department</label>
+                                <input type="text" id="classDepartment" class="form-control" required>
+                            </div>
+                            <div>
+                                <label for="classSchedule">Schedule</label>
+                                <input type="text" id="classSchedule" class="form-control" placeholder="e.g., Mon/Wed 10:00-11:30" required>
+                            </div>
+                            <div>
+                                <label for="classRoom">Room</label>
+                                <input type="text" id="classRoom" class="form-control" required>
+                            </div>
+                             <div>
+                                <label for="classSemester">Semester</label>
+                                <input type="text" id="classSemester" class="form-control" placeholder="e.g., Fall 2025" required>
+                            </div>
+                            <div>
+                                <label for="classCredits">Credits</label>
+                                <input type="number" id="classCredits" class="form-control" required>
+                            </div>
+                             <div>
+                                <label for="classMaxStudents">Max Students</label>
+                                <input type="number" id="classMaxStudents" class="form-control" required>
+                            </div>
+                            <div style="grid-column: 1 / -1;">
+                                <label for="classDescription">Description</label>
+                                <textarea id="classDescription" class="form-control" rows="3"></textarea>
+                            </div>
+                            <div style="grid-column: 1 / -1; text-align: right;">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-plus-circle"></i> Create Class
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Class Details Modal -->
+            <div id="classDetailsModal" class="modal">
+                <div class="modal-content" style="max-width: 600px;">
+                    <div class="modal-header">
+                        <h3 id="classDetailsTitle">Class Details</h3>
+                        <button class="icon-btn" onclick="document.getElementById('classDetailsModal').classList.remove('active')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div id="classDetailsBody" style="margin-top: 1rem; line-height: 1.8;">
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Database Manager -->
+    <script src="js/database.js"></script>
+    
+    <script>
+        /* [SHARED JAVASCRIPT BLOCK START] */
+        function getCurrentUser() {
+            return window.db ? window.db.getCurrentUser() : null;
+        }
+
+        function setupUserUI(user) {
+            document.getElementById('userRoleBadge').textContent = user.role === 'teacher' ? 'Teacher' : 'Student';
+            document.getElementById('teacherView').style.display = user.role === 'teacher' ? 'block' : 'none';
+            document.getElementById('tableHeaderStudents').textContent = user.role === 'teacher' ? 'Students' : 'Teacher';
+        }
+        
+        function setActiveNavLink(page) {
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            const activeLink = document.getElementById(`nav-${page}`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+        
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const appContainer = document.querySelector('.app-container');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        
+        appContainer.setAttribute('data-theme', currentTheme);
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeToggle.querySelector('i').className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        
+        themeToggle.addEventListener('click', () => {
+            const newTheme = appContainer.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            appContainer.setAttribute('data-theme', newTheme);
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.querySelector('i').className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        });
+
+        // Logout Functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                window.db.logout();
+                window.location.href = 'main.html';
+            }
+        });
+        /* [SHARED JAVASCRIPT BLOCK END] */
+
+        // DATABASE CONNECTED DATA
+        let classes = [];
+        let currentClassId = null;
+
+        function loadClassesFromDB(user) {
+            if (!window.db || !window.db.data) return;
+
+            if (user.role === 'teacher') {
+                classes = window.db.getClasses(user.id);
+            } else {
+                classes = window.db.getClasses(null, user.id);
+            }
+
+            // Transform data to include teacher names
+            classes = classes.map(cls => {
+                const teacher = window.db.getUserById(cls.teacherId);
+                return {
+                    ...cls,
+                    teacher: teacher ? teacher.name : 'Unknown Teacher',
+                    students: cls.students ? cls.students.length : 0
+                };
+            });
+        }
+
+        // UTILITY FUNCTIONS
+        function getStudentById(studentId) {
+            return window.db.getUserById(studentId);
+        }
+
+
+        // --- CLASSES SPECIFIC FUNCTIONS ---
+
+        function getActionButtons(userRole, classId) {
+            if (userRole === 'teacher') {
+                return `
+                    <button class="btn btn-secondary" onclick="openStudentManager(${classId})"><i class="fas fa-users"></i> Manage Students</button>
+                    <button class="btn btn-danger" onclick="deleteClass(${classId})"><i class="fas fa-trash-alt"></i> Delete</button>
+                `;
+            } else {
+                return `<button class="btn btn-primary" onclick="viewClassDetails(${classId})"><i class="fas fa-info-circle"></i> Details</button>`;
+            }
+        }
+        
+        function renderClasses() {
+            const user = getCurrentUser();
+            const tableBody = document.getElementById('classesTableBody');
+            tableBody.innerHTML = '';
+            
+            classes.forEach(cls => {
+                const row = document.createElement('tr');
+                
+                let studentTeacherContent = user.role === 'teacher' ? cls.students : cls.teacher;
+                
+                row.innerHTML = `
+                    <td>${cls.name}</td>
+                    <td>${cls.code}</td>
+                    <td>${cls.schedule}</td>
+                    <td>${studentTeacherContent}</td>
+                    <td>${getActionButtons(user.role, cls.id)}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // Teacher Function: Open Student Manager Modal
+        function openStudentManager(id) {
+            const cls = classes.find(c => c.id === id);
+            currentClassId = id;
+            if (!cls) return;
+            
+            document.getElementById('modalClassTitle').textContent = `Students in: ${cls.name}`;
+            renderStudentsList();
+            document.getElementById('studentManagerModal').classList.add('active');
+        }
+        
+        // Teacher Function: Render Students in Modal
+        function renderStudentsList() {
+             const studentListTableBody = document.getElementById('studentListTableBody');
+             studentListTableBody.innerHTML = '';
+             
+             const classData = window.db.getClassById(currentClassId);
+             if (!classData || !classData.students) return;
+             
+             classData.students.forEach(studentId => {
+                 const student = getStudentById(studentId);
+                 if (!student) return;
+                 
+                 const row = document.createElement('tr');
+                 row.innerHTML = `
+                     <td>${student.rollNo}</td>
+                     <td>${student.name}</td>
+                     <td><button class="btn btn-danger btn-sm" onclick="removeStudent(${studentId})"><i class="fas fa-trash"></i> Remove</button></td>
+                 `;
+                 studentListTableBody.appendChild(row);
+             });
+        }
+        
+        // Teacher Function: Add Student
+        document.getElementById('addStudentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const rollNo = document.getElementById('studentRollNo').value.trim().toUpperCase();
+            
+            if (!rollNo) {
+                alert('Please enter a valid Roll Number.');
+                return;
+            }
+            
+            // Find student by roll number
+            const allStudents = window.db.getUsers('student');
+            const student = allStudents.find(s => s.rollNo === rollNo);
+            
+            if (!student) {
+                alert(`Error: Student with Roll No ${rollNo} not found.`);
+                return;
+            }
+
+            // Add student to class
+            const success = window.db.addStudentToClass(currentClassId, student.id);
+            
+            if (success) {
+                loadClassesFromDB(getCurrentUser());
+                renderStudentsList();
+                renderClasses();
+                document.getElementById('studentRollNo').value = '';
+                alert(`Student ${student.name} added to class successfully!`);
+            } else {
+                alert(`Student ${student.name} is already in this class or an error occurred.`);
+            }
+        });
+
+        // Teacher Function: Remove student from class
+        function removeStudent(studentId) {
+            if (confirm('Are you sure you want to remove this student from the class?')) {
+                const success = window.db.removeStudentFromClass(currentClassId, studentId);
+                
+                if (success) {
+                    loadClassesFromDB(getCurrentUser());
+                    renderStudentsList();
+                    renderClasses();
+                    alert('Student removed from class successfully!');
+                } else {
+                    alert('Error removing student from class.');
+                }
+            }
+        }
+        
+        // Student/Teacher Function: View Class Details
+        function viewClassDetails(id) {
+            const cls = window.db.getClassById(id);
+            if (!cls) return;
+            const teacher = window.db.getUserById(cls.teacherId);
+            const teacherName = teacher ? teacher.name : 'Unknown Teacher';
+            const enrolledCount = cls.students ? cls.students.length : 0;
+
+            document.getElementById('classDetailsTitle').textContent = `${cls.name} (${cls.code})`;
+            document.getElementById('classDetailsBody').innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+                    <div><strong>Course Code:</strong> ${cls.code}</div>
+                    <div><strong>Department:</strong> ${cls.department || 'General'}</div>
+                    <div><strong>Instructor:</strong> ${teacherName}</div>
+                    <div><strong>Schedule:</strong> ${cls.schedule}</div>
+                    <div><strong>Room:</strong> ${cls.room || 'TBD'}</div>
+                    <div><strong>Semester:</strong> ${cls.semester || 'Current'}</div>
+                    <div><strong>Credits:</strong> ${cls.credits || 3}</div>
+                    <div><strong>Enrolled:</strong> ${enrolledCount} / ${cls.maxStudents || 60} students</div>
+                </div>
+                <div>
+                    <strong>Description:</strong>
+                    <p style="margin-top: 0.3rem; opacity: 0.85;">${cls.description || 'No description provided.'}</p>
+                </div>
+            `;
+            document.getElementById('classDetailsModal').classList.add('active');
+        }
+
+        // Teacher Function: Delete Class
+        function deleteClass(id) {
+            const cls = classes.find(c => c.id === id);
+            if (!cls) return;
+
+            if (confirm(`Are you sure you want to delete the class "${cls.name}"? This will also delete all associated assignments and cannot be undone.`)) {
+                const success = window.db.deleteClass(id);
+                if (success) {
+                    alert('Class deleted successfully.');
+                    const user = getCurrentUser();
+                    loadClassesFromDB(user);
+                    renderClasses();
+                } else {
+                    alert('Error deleting class.');
+                }
+            }
+        }
+
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for database to load
+            const initClasses = () => {
+                if (!window.db || !window.db.data) {
+                    setTimeout(initClasses, 100);
+                    return;
+                }
+
+                const user = getCurrentUser();
+                if (!user) {
+                    alert('Please log in to access the portal.');
+                    window.location.href = 'main.html';
+                    return;
+                }
+                
+                loadClassesFromDB(user);
+                setupUserUI(user);
+                renderClasses();
+                setActiveNavLink('classes');
+            };
+
+            initClasses();
+        });
+
+        // New Class Functionality
+        document.querySelector('#teacherView .btn-primary').onclick = () => {
+            document.getElementById('newClassModal').classList.add('active');
+        };
+
+        // Handle new class form submission
+        document.getElementById('newClassForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const currentUser = getCurrentUser();
+            if (!currentUser || currentUser.role !== 'teacher') {
+                alert('Only teachers can create classes');
+                return;
+            }
+
+            const newClass = {
+                name: document.getElementById('className').value.trim(),
+                code: document.getElementById('classCode').value.trim(),
+                department: document.getElementById('classDepartment').value.trim(),
+                teacherId: currentUser.id,
+                schedule: document.getElementById('classSchedule').value.trim(),
+                room: document.getElementById('classRoom').value.trim(),
+                semester: document.getElementById('classSemester').value.trim(),
+                credits: parseInt(document.getElementById('classCredits').value),
+                maxStudents: parseInt(document.getElementById('classMaxStudents').value),
+                description: document.getElementById('classDescription').value.trim(),
+                students: [],
+            };
+
+            const success = window.db.addClass(newClass);
+
+            if (success) {
+                loadClassesFromDB(currentUser);
+                renderClasses();
+                document.getElementById('newClassModal').classList.remove('active');
+                document.getElementById('newClassForm').reset();
+                alert('Class created successfully!');
+            } else {
+                alert('Error creating class. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

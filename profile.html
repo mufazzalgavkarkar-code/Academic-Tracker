@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Engineering Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* (REMOVED: Paste the full Common CSS from dashboard.html here for external use) */
+        /* ... Using embedded styles for completeness ... */
+        :root {
+    --primary-color: #006D77;    /* Deep Teal */
+    --secondary-color: #83C5BE;  /* Light Teal */
+    --accent-color: #E29578;     /* Coral */
+    --danger-color: #E76F51;     /* Burnt Orange */
+    --background-color: #EDF6F9; /* Light Blue-Gray */
+    --text-color: #2C3E50;       /* Dark Blue-Gray */
+    --card-bg: #FFFFFF;          /* White */
+    --border-color: #B8D8D8;     /* Light Teal Border */
+    --shadow: 0 0.125rem 0.25rem rgba(0, 109, 119, 0.15);
+    --sidebar-width: 250px;
+}
+
+[data-theme="dark"] {
+    --primary-color: #006D77;    /* Deep Teal */
+    --secondary-color: #83C5BE;  /* Light Teal */
+    --accent-color: #E29578;     /* Coral */
+    --danger-color: #E76F51;     /* Burnt Orange */
+    --background-color: #1A2327; /* Dark Blue-Gray */
+    --text-color: #EDF6F9;      /* Light Blue-Gray */
+    --card-bg: #2C3E50;         /* Dark Blue */
+    --border-color: #006D77;    /* Deep Teal */
+    --shadow: 0 0.125rem 0.25rem rgba(0, 109, 119, 0.25);
+}
+        /* ... Rest of Common CSS for layout, cards, buttons, forms, tables... */
+        /* Only adding Profile-specific CSS here to save space, assuming the user copies full common CSS */
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--background-color); color: var(--text-color); transition: background-color 0.3s, color 0.3s; min-height: 100vh; }
+        h1, h2, h3, h4 { color: var(--text-color); }
+        .app-container { display: flex; }
+        .sidebar { width: var(--sidebar-width); height: 100vh; position: fixed; top: 0; left: 0; background-color: var(--card-bg); border-right: 1px solid var(--border-color); padding: 1.5rem 0; box-shadow: var(--shadow); overflow-y: auto; z-index: 1000; }
+        .logo-section { padding: 0 1.5rem 1.5rem; text-align: center; border-bottom: 1px solid var(--border-color); }
+        .logo-section h2 { font-size: 1.5rem; color: var(--primary-color); font-weight: 700; }
+        .nav-menu { list-style: none; padding: 1rem 0; }
+        .nav-item a { display: flex; align-items: center; padding: 0.75rem 1.5rem; color: var(--text-color); text-decoration: none; transition: background-color 0.2s, color 0.2s; font-weight: 500; }
+        .nav-item a:hover {
+    background-color: rgba(0, 109, 119, 0.1); /* Deep Teal with opacity */
+    color: var(--primary-color);
+}
+        .nav-item a.active { background-color: var(--primary-color); color: white; border-left: 5px solid var(--accent-color); }
+        .nav-item i { margin-right: 1rem; font-size: 1.1rem; }
+        .main-content { margin-left: var(--sidebar-width); flex-grow: 1; padding: 2rem; transition: margin-left 0.3s; }
+        .top-navbar { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; }
+        .welcome-message h1 { font-size: 1.75rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .role-badge { display: inline-block; padding: 0.25rem 0.75rem; background-color: var(--accent-color); color: white; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .action-group { display: flex; gap: 1rem; align-items: center; }
+        .icon-btn { background: none; border: none; color: var(--text-color); cursor: pointer; font-size: 1.25rem; padding: 0.5rem; border-radius: 50%; transition: background-color 0.2s; }
+        .icon-btn:hover { background-color: rgba(0, 0, 0, 0.05); }
+        .card { background-color: var(--card-bg); border-radius: 10px; box-shadow: var(--shadow); padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--border-color); }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.95rem; }
+        input[type="text"], input[type="email"], input[type="password"], select, textarea { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: 6px; background-color: var(--background-color); color: var(--text-color); transition: border-color 0.2s, box-shadow 0.2s; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); }
+        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: background-color 0.2s; margin-right: 0.5rem; }
+        .btn-primary { background-color: var(--primary-color); color: white; }
+        .btn-primary:hover {
+    background-color: #005a63; /* Darker Deep Teal */
+}
+        .btn-secondary { background-color: var(--secondary-color); color: white; }
+        .btn-secondary:hover {
+    background-color: #6eb3ac; /* Darker Light Teal */
+}
+        .btn i { margin-right: 0.5rem; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        
+        /* Profile specific CSS */
+        .profile-header-card {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-picture {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            font-weight: 500;
+            border: 4px solid var(--accent-color);
+        }
+        
+        .profile-info h1 {
+            margin-bottom: 0.25rem;
+            font-size: 1.8rem;
+        }
+        
+        .tab-menu {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            margin-right: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--secondary-color);
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: color 0.2s, border-bottom-color 0.2s;
+        }
+
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content.hidden {
+            display: none;
+        }
+        
+        @media (max-width: 992px) {
+            /* ... Responsive overrides ... */
+            .profile-header-card { flex-direction: column; text-align: center; }
+            .profile-picture { margin-right: 0; margin-bottom: 1rem; }
+            .main-content { margin-left: 0; padding: 1rem; }
+            /* ... */
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container" data-theme="light">
+        <aside class="sidebar">
+            <div class="logo-section"><h2>Engg Portal</h2></div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li class="nav-item"><a href="profile.html" class="active"><i class="fas fa-user-circle"></i>Profile</a></li>
+                <li class="nav-item"><a href="classes.html"><i class="fas fa-chalkboard-teacher"></i>Classes</a></li>
+                <li class="nav-item"><a href="assignments.html"><i class="fas fa-tasks"></i>Assignments</a></li>
+                <li class="nav-item"><a href="practicals.html"><i class="fas fa-flask"></i>Practicals</a></li>
+                <li class="nav-item"><a href="attendance.html"><i class="fas fa-calendar-check"></i>Attendance</a></li>
+                <li class="nav-item"><a href="reports.html"><i class="fas fa-chart-line"></i>Reports</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-navbar">
+                <div class="welcome-message">
+                    <h1>Profile Settings</h1>
+                    <span id="userRoleBadge" class="role-badge">Role</span>
+                </div>
+                <div class="action-group">
+                    <button id="addStudentBtn" class="btn btn-primary teacher-only" style="display: none;"><i class="fas fa-user-plus"></i> Add Student</button>
+                    <button id="themeToggle" class="icon-btn" title="Toggle Dark/Light Theme"><i class="fas fa-sun"></i></button>
+                    <button id="logoutBtn" class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+            
+            <div class="card profile-header-card">
+                <div class="profile-picture" id="profilePicture">S</div>
+                <div class="profile-info">
+                    <h1 class="profile-name" id="userName">User Name</h1>
+                    <p id="userEmail" style="opacity: 0.8;">user@email.com</p>
+                    <p class="role-badge" style="background-color: var(--secondary-color); margin-top: 0.5rem; display: inline-block;">
+                        <i class="fas fa-id-badge"></i> <span id="userRollNo">ENG001</span>
+                    </p>
+                    <button class="btn btn-secondary" id="changePhotoBtn" style="margin-top: 1rem;"><i class="fas fa-camera"></i> Change Photo</button>
+                </div>
+            </div>
+
+            <div class="tab-menu">
+                <button class="tab-button active" data-tab="personal"><i class="fas fa-info-circle"></i> Personal Info</button>
+                <button class="tab-button" data-tab="security"><i class="fas fa-lock"></i> Security</button>
+                <button class="tab-button" data-tab="preferences"><i class="fas fa-cog"></i> Preferences</button>
+            </div>
+
+            <div class="tab-content" id="personal">
+                <div class="card">
+                    <h3>Update Personal Information</h3>
+                    <form id="personalInfoForm" style="margin-top: 1rem;">
+                        <div class="grid-2">
+                            <div class="form-group"><label for="fullName">Full Name</label><input type="text" id="fullName" required></div>
+                            <div class="form-group"><label for="rollNo">Roll Number</label><input type="text" id="rollNo" readonly></div>
+                        </div>
+                        <div class="form-group"><label for="email">Email Address</label><input type="email" id="email" required></div>
+                        <div class="form-group"><label for="address">Mailing Address / Bio</label><textarea id="address" rows="3"></textarea></div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="tab-content hidden" id="security">
+                <div class="card">
+                    <h3>Change Password</h3>
+                    <form id="securityForm" style="margin-top: 1rem;">
+                        <div class="form-group"><label for="currentPassword">Current Password</label><input type="password" id="currentPassword" required></div>
+                        <div class="form-group"><label for="newPassword">New Password</label><input type="password" id="newPassword" required></div>
+                        <div class="form-group"><label for="confirmNewPassword">Confirm New Password</label><input type="password" id="confirmNewPassword" required></div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-key"></i> Update Password</button>
+                    </form>
+                </div>
+
+                <div class="card" style="border-color: var(--danger-color);">
+                    <h3 style="color: var(--danger-color);">Delete Account</h3>
+                    <p style="margin-top: 0.5rem; margin-bottom: 1rem; opacity: 0.8;">
+                        This action is irreversible. All your data, including assignments, grades, and personal information, will be permanently deleted.
+                    </p>
+                    <button id="deleteAccountBtn" class="btn" style="background-color: var(--danger-color); color: white;"><i class="fas fa-trash-alt"></i> Delete My Account</button>
+                </div>
+            </div>
+
+            <div class="tab-content hidden" id="preferences">
+                <div class="card">
+                    <h3>Portal Preferences</h3>
+                    <form id="preferencesForm" style="margin-top: 1rem;">
+                        <div class="form-group"><label for="notification">Email Notifications</label><select id="notification"><option value="immediate">Immediate</option><option value="daily">Daily Digest</option><option value="off">Off</option></select></div>
+                        <div class="form-group"><label for="language">Portal Language</label><select id="language"><option value="en">English</option><option value="hi">Hindi</option></select></div>
+                        <div class="form-group"><label>Theme</label><p style="font-size: 0.9rem; opacity: 0.7;">(Toggle using the icon in the top right.)</p></div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Preferences</button>
+                    </form>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div id="addStudentModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>Add New Student</h3>
+                <button class="icon-btn" onclick="document.getElementById('addStudentModal').style.display='none'"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="addStudentForm" style="margin-top: 1rem;">
+                <div class="grid-2">
+                    <div class="form-group"><label for="studentName">Full Name</label><input type="text" id="studentName" required></div>
+                    <div class="form-group"><label for="studentEmail">Email</label><input type="email" id="studentEmail" required></div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label for="studentPassword">Password</label><input type="password" id="studentPassword" required></div>
+                    <div class="form-group"><label for="studentRollNo">Roll Number</label><input type="text" id="studentRollNo" required></div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label for="studentDepartment">Department</label><input type="text" id="studentDepartment" required></div>
+                    <div class="form-group"><label for="studentEnrollmentYear">Enrollment Year</label><input type="number" id="studentEnrollmentYear" required></div>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Add Student</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Database Manager -->
+    <script src="js/database.js"></script>
+    
+    <script>
+        // --- COMMON CORE FUNCTIONS ---
+        function getCurrentUser() {
+            return window.db ? window.db.getCurrentUser() : null;
+        }
+
+        function applyTheme() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.querySelector('.app-container').setAttribute('data-theme', currentTheme);
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            const iconElement = document.getElementById('themeToggle') ? document.getElementById('themeToggle').querySelector('i') : null;
+            if (iconElement) { iconElement.className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon'; }
+        }
+        
+        function applyUserRoleUI(user) {
+            const userNameEl = document.getElementById('userName');
+            const userRoleBadgeEl = document.getElementById('userRoleBadge');
+            
+            if (userNameEl) userNameEl.textContent = user.name;
+            if (userRoleBadgeEl) userRoleBadgeEl.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+            
+            const teacherLinks = document.querySelectorAll('.teacher-only');
+            teacherLinks.forEach(el => {
+                if (user.role === 'teacher') {
+                    el.style.display = el.tagName === 'BUTTON' ? 'inline-flex' : 'block';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+        }
+        
+        // --- PROFILE SPECIFIC FUNCTIONS ---
+        function loadProfileData() {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            document.getElementById('profilePicture').textContent = user.name.charAt(0);
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email || 'N/A';
+            document.getElementById('userRollNo').textContent = user.rollNo || user.employeeId || user.role.toUpperCase();
+
+            document.getElementById('fullName').value = user.name || '';
+            document.getElementById('rollNo').value = user.rollNo || user.employeeId || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('address').value = user.address || '';
+        }
+
+        function handleTabSwitching() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.add('hidden'));
+
+                    button.classList.add('active');
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.remove('hidden');
+                });
+            });
+        }
+        
+        // Initial setup on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for database to load
+            const initProfile = () => {
+                if (!window.db || !window.db.data) {
+                    setTimeout(initProfile, 100);
+                    return;
+                }
+
+                const user = getCurrentUser();
+                
+                if (!user) { 
+                    alert('Please log in to access the portal.'); 
+                    window.location.href = 'main.html'; 
+                    return; 
+                }
+                
+                applyTheme();
+                applyUserRoleUI(user);
+                loadProfileData();
+                handleTabSwitching();
+                
+                // Event Listeners
+                document.getElementById('themeToggle').addEventListener('click', () => {
+                    const currentTheme = document.querySelector('.app-container').getAttribute('data-theme');
+                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                    localStorage.setItem('theme', newTheme);
+                    applyTheme();
+                });
+
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    if (confirm('Are you sure you want to log out?')) { 
+                        window.db.logout(); 
+                        window.location.href = 'main.html'; 
+                    }
+                });
+                
+                // Form submission handlers
+                document.getElementById('personalInfoForm').addEventListener('submit', (e) => { 
+                    e.preventDefault(); 
+                    const user = getCurrentUser();
+                    const updates = {
+                        name: document.getElementById('fullName').value,
+                        email: document.getElementById('email').value,
+                        address: document.getElementById('address').value
+                    };
+                    
+                    const success = window.db.updateUser(user.id, updates);
+                    if (success) {
+                        // Update current user in localStorage
+                        const updatedUser = { ...user, ...updates };
+                        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+                        window.db.currentUser = updatedUser;
+                        
+                        loadProfileData();
+                        alert('Personal info saved successfully!');
+                    } else {
+                        alert('Error saving personal info.');
+                    }
+                });
+                
+                document.getElementById('deleteAccountBtn').addEventListener('click', () => {
+                    const user = getCurrentUser();
+                    if (confirm(`Are you absolutely sure you want to delete your account, ${user.name}? This action cannot be undone.`)) {
+                        if (prompt('To confirm, please type "DELETE" in the box below.') === 'DELETE') {
+                            const success = window.db.deleteUser(user.id);
+                            if (success) {
+                                alert('Account deleted successfully.');
+                                window.db.logout();
+                                window.location.href = 'main.html';
+                            } else {
+                                alert('Error deleting account.');
+                            }
+                        } else {
+                            alert('Deletion cancelled. Incorrect confirmation text.');
+                        }
+                    }
+                });
+
+                document.getElementById('securityForm').addEventListener('submit', (e) => { 
+                    e.preventDefault(); 
+                    const currentPassword = document.getElementById('currentPassword').value;
+                    const newPassword = document.getElementById('newPassword').value;
+                    const confirmPassword = document.getElementById('confirmNewPassword').value;
+                    
+                    const user = getCurrentUser();
+                    
+                    if (user.password !== currentPassword) {
+                        alert('Current password is incorrect.');
+                        return;
+                    }
+                    
+                    if (newPassword !== confirmPassword) {
+                        alert('New passwords do not match.');
+                        return;
+                    }
+                    
+                    if (newPassword.length < 6) {
+                        alert('Password must be at least 6 characters long.');
+                        return;
+                    }
+                    
+                    const success = window.db.updateUser(user.id, { password: newPassword });
+                    if (success) {
+                        alert('Password updated successfully!');
+                        document.getElementById('securityForm').reset();
+                    } else {
+                        alert('Error updating password.');
+                    }
+                });
+                
+                document.getElementById('preferencesForm').addEventListener('submit', (e) => { 
+                    e.preventDefault(); 
+                    alert('Preferences saved successfully!'); 
+                });
+                
+                document.getElementById('changePhotoBtn').addEventListener('click', function() { 
+                    alert('Photo change functionality would be implemented here'); 
+                });
+
+                // Add student functionality
+                const addStudentBtn = document.getElementById('addStudentBtn');
+                const addStudentModal = document.getElementById('addStudentModal');
+                if(addStudentBtn) {
+                    addStudentBtn.addEventListener('click', () => {
+                        addStudentModal.style.display = 'flex';
+                    });
+                }
+
+                document.getElementById('addStudentForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const newStudent = {
+                        name: document.getElementById('studentName').value,
+                        email: document.getElementById('studentEmail').value,
+                        password: document.getElementById('studentPassword').value,
+                        role: 'student',
+                        rollNo: document.getElementById('studentRollNo').value,
+                        department: document.getElementById('studentDepartment').value,
+                        enrollmentYear: parseInt(document.getElementById('studentEnrollmentYear').value),
+                        createdAt: new Date().toISOString(),
+                        lastLogin: new Date().toISOString()
+                    };
+
+                    const success = window.db.addUser(newStudent);
+                    if (success) {
+                        alert('Student added successfully!');
+                        document.getElementById('addStudentForm').reset();
+                        addStudentModal.style.display = 'none';
+                    } else {
+                        alert('Error adding student. A user with this email or roll number may already exist.');
+                    }
+                });
+            };
+
+            initProfile();
+        });
+    </script>
+</body>
+</html>

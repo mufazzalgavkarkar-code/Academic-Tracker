@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover { background-color: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔐 Authentication System Test</h1>
+    
+    <div class="test-section">
+        <h2>Database Status</h2>
+        <div id="dbStatus" class="status warning">Checking database...</div>
+        <button onclick="checkDatabase()">Refresh Database Status</button>
+        <pre id="dbDetails"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Login</h2>
+        <p>Use these test credentials:</p>
+        <ul>
+            <li><strong>Student:</strong> sarthak@engineering.edu / student123</li>
+            <li><strong>Teacher:</strong> priya.sharma@engineering.edu / teacher123</li>
+        </ul>
+        
+        <div style="margin: 20px 0;">
+            <input type="email" id="testEmail" placeholder="Email" style="padding: 8px; margin: 5px; width: 200px;">
+            <input type="password" id="testPassword" placeholder="Password" style="padding: 8px; margin: 5px; width: 200px;">
+            <button onclick="testLogin()">Test Login</button>
+        </div>
+        
+        <div id="loginStatus"></div>
+        <pre id="loginDetails"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Current Session</h2>
+        <div id="sessionStatus" class="status">No active session</div>
+        <button onclick="checkSession()">Check Session</button>
+        <button onclick="clearSession()">Clear Session</button>
+        <pre id="sessionDetails"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Navigation Test</h2>
+        <button onclick="goToLogin()">Go to Login Page</button>
+        <button onclick="goToDashboard()">Go to Dashboard</button>
+        <button onclick="goToMain()">Go to Main Portal</button>
+    </div>
+
+    <!-- Include the database manager -->
+    <script src="js/database.js"></script>
+    
+    <script>
+        let testInterval;
+
+        function updateStatus(elementId, message, type = 'warning') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+
+        function updateDetails(elementId, data) {
+            document.getElementById(elementId).textContent = JSON.stringify(data, null, 2);
+        }
+
+        function checkDatabase() {
+            console.log('=== Database Check ===');
+            
+            const status = {
+                hasDatabase: !!window.db,
+                hasData: !!window.db?.data,
+                hasUsers: !!window.db?.data?.users,
+                userCount: window.db?.data?.users?.length || 0,
+                hasClasses: !!window.db?.data?.classes,
+                classCount: window.db?.data?.classes?.length || 0,
+                storageData: !!localStorage.getItem('engineeringPortalData'),
+                currentUser: window.db?.getCurrentUser()
+            };
+
+            console.log('Database status:', status);
+
+            if (status.hasDatabase && status.hasData && status.hasUsers && status.userCount > 0) {
+                updateStatus('dbStatus', `✅ Database Ready (${status.userCount} users, ${status.classCount} classes)`, 'success');
+            } else if (status.hasDatabase && status.hasData) {
+                updateStatus('dbStatus', '⚠️ Database loaded but missing data', 'warning');
+            } else if (status.hasDatabase) {
+                updateStatus('dbStatus', '⚠️ Database exists but no data loaded', 'warning');
+            } else {
+                updateStatus('dbStatus', '❌ Database not available', 'error');
+            }
+
+            updateDetails('dbDetails', status);
+
+            // Show sample users for testing
+            if (window.db?.data?.users) {
+                console.log('Available users for testing:');
+                window.db.data.users.forEach(user => {
+                    console.log(`- ${user.role}: ${user.email} / ${user.password}`);
+                });
+            }
+        }
+
+        function testLogin() {
+            const email = document.getElementById('testEmail').value.trim();
+            const password = document.getElementById('testPassword').value;
+
+            if (!email || !password) {
+                updateStatus('loginStatus', 'Please enter email and password', 'error');
+                return;
+            }
+
+            console.log(`=== Testing Login: ${email} ===`);
+
+            if (!window.db || !window.db.data || !window.db.data.users) {
+                updateStatus('loginStatus', 'Database not ready', 'error');
+                return;
+            }
+
+            try {
+                const user = window.db.login(email, password);
+                if (user) {
+                    updateStatus('loginStatus', `✅ Login successful! Welcome ${user.name} (${user.role})`, 'success');
+                    updateDetails('loginDetails', {
+                        user: user,
+                        sessionStored: !!localStorage.getItem('currentUser')
+                    });
+                    checkSession(); // Update session status
+                } else {
+                    updateStatus('loginStatus', '❌ Invalid credentials', 'error');
+                    updateDetails('loginDetails', { error: 'Authentication failed' });
+                }
+            } catch (error) {
+                updateStatus('loginStatus', `❌ Login error: ${error.message}`, 'error');
+                updateDetails('loginDetails', { error: error.message });
+            }
+        }
+
+        function checkSession() {
+            const currentUser = window.db?.getCurrentUser();
+            const storageUser = localStorage.getItem('currentUser');
+
+            if (currentUser) {
+                updateStatus('sessionStatus', `✅ Active session: ${currentUser.name} (${currentUser.role})`, 'success');
+                updateDetails('sessionDetails', {
+                    currentUser: currentUser,
+                    localStorage: storageUser ? JSON.parse(storageUser) : null
+                });
+            } else {
+                updateStatus('sessionStatus', 'No active session', 'warning');
+                updateDetails('sessionDetails', {
+                    currentUser: null,
+                    localStorage: storageUser ? JSON.parse(storageUser) : null
+                });
+            }
+        }
+
+        function clearSession() {
+            if (window.db) {
+                window.db.logout();
+            }
+            localStorage.removeItem('currentUser');
+            updateStatus('sessionStatus', 'Session cleared', 'warning');
+            updateDetails('sessionDetails', { cleared: true });
+        }
+
+        function goToLogin() {
+            window.location.href = 'main.html';
+        }
+
+        function goToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+
+        function goToMain() {
+            window.location.href = 'index.html';
+        }
+
+        // Auto-populate test credentials
+        function populateTestCredentials(type) {
+            if (type === 'student') {
+                document.getElementById('testEmail').value = 'sarthak@engineering.edu';
+                document.getElementById('testPassword').value = 'student123';
+            } else {
+                document.getElementById('testEmail').value = 'priya.sharma@engineering.edu';
+                document.getElementById('testPassword').value = 'teacher123';
+            }
+        }
+
+        // Initialize the test page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔧 Authentication Test Page Loaded');
+            
+            // Wait for database to be ready
+            const waitForDb = () => {
+                if (window.db && window.db.data) {
+                    checkDatabase();
+                    checkSession();
+                    
+                    // Auto-populate student credentials
+                    populateTestCredentials('student');
+                } else {
+                    setTimeout(waitForDb, 100);
+                }
+            };
+            
+            waitForDb();
+        });
+
+        // Periodically check database status
+        testInterval = setInterval(() => {
+            if (window.db && window.db.data) {
+                // Database is ready, no need to keep checking
+                clearInterval(testInterval);
+            }
+        }, 500);
+    </script>
+</body>
+</html>

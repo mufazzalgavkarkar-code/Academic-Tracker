@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register - Engineering Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #006D77;    /* Deep Teal */
+            --secondary-color: #83C5BE;  /* Light Teal */
+            --accent-color: #E29578;     /* Coral */
+            --danger-color: #E76F51;     /* Burnt Orange */
+            --background-color: #EDF6F9; /* Light Blue-Gray */
+            --text-color: #2C3E50;       /* Dark Blue-Gray */
+            --card-bg: #FFFFFF;          /* White */
+            --border-color: #B8D8D8;     /* Light Teal Border */
+            --shadow: 0 0.125rem 0.25rem rgba(0, 109, 119, 0.15);
+            --sidebar-width: 250px;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #006D77;    /* Deep Teal */
+            --secondary-color: #83C5BE;  /* Light Teal */
+            --accent-color: #E29578;     /* Coral */
+            --danger-color: #E76F51;     /* Burnt Orange */
+            --background-color: #1A2327; /* Dark Blue-Gray */
+            --text-color: #EDF6F9;      /* Light Blue-Gray */
+            --card-bg: #2C3E50;         /* Dark Blue */
+            --border-color: #006D77;    /* Deep Teal */
+            --shadow: 0 0.125rem 0.25rem rgba(0, 109, 119, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container {
+            width: 90%;
+            max-width: 450px;
+            padding: 2rem 0;
+        }
+
+        .auth-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            border-top: 5px solid var(--primary-color);
+            transition: all 0.3s;
+        }
+
+        .auth-card h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            background-color: var(--primary-color);
+            color: white;
+            transition: background-color 0.2s;
+        }
+
+        .btn-auth:hover {
+            background-color: #0056b3;
+        }
+
+        .toggle-link {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .toggle-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2 id="formTitle">Login</h2>
+            <form id="authForm">
+                <div class="form-group hidden" id="registerFields">
+                    <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your full name">
+                </div>
+                <div class="form-group hidden" id="roleField">
+                    <label for="role"><i class="fas fa-user-tag"></i> I am a...</label>
+                    <select id="role">
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
+                </div>
+                <div class="form-group hidden" id="rollNoField">
+                    <label for="rollNo"><i class="fas fa-address-card"></i> Roll Number</label>
+                    <input type="text" id="rollNo" placeholder="e.g., ENG001">
+                </div>
+                <div class="form-group hidden" id="confirmPasswordField">
+                    <label for="confirmPassword"><i class="fas fa-lock"></i> Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm your password">
+                </div>
+
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+
+                    <button type="submit" class="btn-auth" id="submitBtn">Login</button>
+                </form>
+
+                <div class="toggle-link">
+                    <span id="toggleText">Don't have an account?</span>
+                    <a href="#" id="toggleAuth">Register</a>
+                </div>
+                
+                <!-- Demo account quick fill -->
+                <div style="margin-top: 1.5rem; padding: 0.75rem; background: var(--background-color); border-radius: 6px; text-align: center;">
+                    <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">Quick Demo Logins:</div>
+                    <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+                        <button type="button" onclick="fillCredentials('student')" style="background: var(--primary-color); color: white; border: none; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">
+                            <i class="fas fa-user-graduate"></i> Student Demo
+                        </button>
+                        <button type="button" onclick="fillCredentials('teacher')" style="background: var(--secondary-color); color: white; border: none; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">
+                            <i class="fas fa-chalkboard-teacher"></i> Teacher Demo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Existing session banner -->
+                <div id="activeSessionBanner" style="display: none; margin-top: 1.25rem; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; text-align: center;">
+                    <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">
+                        Signed in as <strong id="sessionUserName"></strong> (<span id="sessionUserRole"></span>)
+                    </p>
+                    <a href="dashboard.html" class="btn-auth" style="display: inline-block; padding: 0.4rem 1rem; text-decoration: none; font-size: 0.85rem; margin-right: 0.5rem;">Go to Dashboard</a>
+                    <button type="button" onclick="logoutCurrentSession()" style="background: none; border: 1px solid var(--danger-color); color: var(--danger-color); padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.85rem; cursor: pointer;">Logout</button>
+                </div>
+                
+                <!-- Loading indicator -->
+                <div id="loadingIndicator" style="margin-top: 1rem; text-align: center; font-size: 0.9rem; color: var(--primary-color);">
+                    <i class="fas fa-spinner fa-spin"></i> Loading system...
+                </div>
+                
+                <!-- Debug information -->
+                <div style="margin-top: 1rem; text-align: center; font-size: 0.8rem; opacity: 0.7;">
+                    <button type="button" onclick="checkDatabaseStatus()" style="background: none; border: 1px solid #ccc; padding: 0.3rem 0.6rem; cursor: pointer;">Check Database Status</button>
+                </div>
+        </div>
+    </div>
+
+    <!-- Database Manager -->
+    <script src="js/database.js"></script>
+    
+    <script>
+        const authForm = document.getElementById('authForm');
+        const formTitle = document.getElementById('formTitle');
+        const submitBtn = document.getElementById('submitBtn');
+        const toggleAuth = document.getElementById('toggleAuth');
+        const toggleText = document.getElementById('toggleText');
+        const registerFields = document.getElementById('registerFields');
+        const roleField = document.getElementById('roleField');
+        const rollNoField = document.getElementById('rollNoField');
+        const confirmPasswordField = document.getElementById('confirmPasswordField');
+        
+        let isLogin = true;
+
+        function fillCredentials(type) {
+            if (!isLogin) {
+                toggleAuth.click();
+            }
+            if (type === 'student') {
+                document.getElementById('email').value = 'sarthak@engineering.edu';
+                document.getElementById('password').value = 'student123';
+            } else {
+                document.getElementById('email').value = 'priya.sharma@engineering.edu';
+                document.getElementById('password').value = 'teacher123';
+            }
+        }
+
+        function logoutCurrentSession() {
+            if (window.db) {
+                window.db.logout();
+            }
+            document.getElementById('activeSessionBanner').style.display = 'none';
+            alert('Logged out. You can now log in with another account.');
+        }
+
+        toggleAuth.addEventListener('click', (e) => {
+            e.preventDefault();
+            isLogin = !isLogin;
+            
+            const action = isLogin ? 'Login' : 'Register';
+            
+            formTitle.textContent = action;
+            submitBtn.textContent = action;
+            toggleText.textContent = isLogin ? "Don't have an account?" : "Already have an account?";
+            toggleAuth.textContent = isLogin ? 'Register' : 'Login';
+
+            // Toggle visibility of registration fields
+            [registerFields, roleField, confirmPasswordField].forEach(el => 
+                el.classList.toggle('hidden', isLogin)
+            );
+            
+            // Handle Roll No visibility based on default role
+            const roleSelect = document.getElementById('role');
+            rollNoField.classList.toggle('hidden', isLogin || roleSelect.value !== 'student');
+        });
+
+        document.getElementById('role').addEventListener('change', function() {
+            rollNoField.classList.toggle('hidden', this.value !== 'student');
+        });
+
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Ensure database is loaded
+            if (!window.db) {
+                alert('System is initializing. Please wait a moment and try again.');
+                return;
+            }
+            
+            if (!window.db.data || !window.db.data.users) {
+                alert('Database is initializing. Please try again.');
+                return;
+            }
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (isLogin) {
+                // --- LOGIN LOGIC ---
+                try {
+                    const user = window.db.login(email, password);
+                    if (user) {
+                        alert(`Login successful! Welcome, ${user.name}.`);
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        alert('Invalid email or password.\n\nTry:\nStudent: sarthak@engineering.edu / student123\nTeacher: priya.sharma@engineering.edu / teacher123');
+                    }
+                } catch (error) {
+                    alert('Login error: ' + error.message);
+                }
+            } else {
+                // --- REGISTRATION LOGIC ---
+                const name = document.getElementById('name').value.trim();
+                const role = document.getElementById('role').value;
+                const rollNo = document.getElementById('rollNo').value.trim();
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (!name || !email || !password || !confirmPassword) {
+                    alert('All required fields must be filled.');
+                    return;
+                }
+
+                if (role === 'student' && !rollNo) {
+                    alert('Roll number is required for students.');
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    alert('Password must be at least 6 characters long');
+                    return;
+                }
+                
+                try {
+                    const userData = {
+                        name,
+                        email,
+                        password,
+                        role,
+                        address: '',
+                        phone: '',
+                        department: 'Computer Science'
+                    };
+
+                    if (role === 'student') {
+                        userData.rollNo = rollNo;
+                        userData.classId = 101;
+                        userData.dateOfBirth = '';
+                        userData.enrollmentYear = new Date().getFullYear();
+                    } else {
+                        userData.employeeId = 'EMP' + String(Date.now()).slice(-6);
+                        userData.qualification = 'Faculty';
+                        userData.experience = 1;
+                        userData.dateOfJoining = new Date().toISOString().split('T')[0];
+                    }
+
+                    const newUser = window.db.register(userData);
+                    alert(`Account created successfully! Welcome, ${newUser.name}`);
+                    window.location.href = 'dashboard.html';
+                } catch (error) {
+                    alert('Registration error: ' + error.message);
+                }
+            }
+        });
+
+        // Debug function to check database status
+        function checkDatabaseStatus() {
+            const status = {
+                hasDatabase: !!window.db,
+                hasData: !!window.db?.data,
+                hasUsers: !!window.db?.data?.users,
+                userCount: window.db?.data?.users?.length || 0,
+                currentUser: window.db?.getCurrentUser()?.name || 'None'
+            };
+            
+            alert('Database Status:\n' + JSON.stringify(status, null, 2));
+        }
+
+        // Wait for database to be ready
+        function waitForDatabase(callback) {
+            const checkDatabase = () => {
+                if (window.db && window.db.data && window.db.data.users) {
+                    const loadingEl = document.getElementById('loadingIndicator');
+                    if (loadingEl) loadingEl.style.display = 'none';
+                    callback();
+                } else {
+                    setTimeout(checkDatabase, 100);
+                }
+            };
+            checkDatabase();
+        }
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('logout') === 'true') {
+                if (window.db) window.db.logout();
+            }
+
+            waitForDatabase(() => {
+                const currentUser = window.db.getCurrentUser();
+                if (currentUser && urlParams.get('logout') !== 'true') {
+                    // Show banner rather than hard redirecting so user can switch account or proceed
+                    const banner = document.getElementById('activeSessionBanner');
+                    if (banner) {
+                        document.getElementById('sessionUserName').textContent = currentUser.name;
+                        document.getElementById('sessionUserRole').textContent = currentUser.role;
+                        banner.style.display = 'block';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

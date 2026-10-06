@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments - Engineering Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* [SHARED CSS BLOCK START] - POLISHED THEME AND SPACING */
+        :root {
+            /* New Deep Teal & Soft Grey Theme */
+            --primary-color: #00796B; /* Deep Teal */
+            --secondary-color: #37474F; /* Dark Slate */
+            --background-color: #F0F4F8; /* Soft Light Grey/Blue */
+            --text-color: #263238; /* Dark Text */
+            --card-bg: #ffffff;
+            --border-color: #CFD8DC; /* Light Border */
+            --shadow: 0 6px 12px rgba(0,0,0,0.08); /* Softer Shadow */
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --error-color: #F44336;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4DB6AC; /* Lighter Teal */
+            --secondary-color: #1A1E20; /* Very Dark Background */
+            --background-color: #263238; /* Deep Slate Background */
+            --text-color: #CFD8DC; /* Light Text */
+            --card-bg: #37474F; /* Dark Card */
+            --border-color: #546E7A; /* Dark Border */
+            --shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+        }
+
+        /* --- Application Layout (Sidebar/Main Content) --- */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+
+        .logo-section {
+            padding: 0 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item a {
+            display: flex; /* Polishing: use flex for icon alignment */
+            align-items: center;
+            padding: 0.85rem 1.5rem; /* Polishing: Slightly more vertical padding */
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .nav-item a i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .nav-item a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item .active {
+            background-color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2.5rem; /* Polishing: Increased main padding */
+            width: calc(100% - 250px);
+        }
+
+        /* --- Components & Utility Styles --- */
+        .top-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.25rem; /* Polishing: Increased bottom padding */
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .welcome-message {
+            display: flex; /* Polishing: use flex to align H1 and Badge */
+            align-items: baseline;
+            gap: 15px;
+        }
+        
+        .welcome-message h1 {
+            font-size: 2rem;
+            font-weight: 300;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 2rem; /* Polishing: Increased card padding for content area */
+            margin-bottom: 1.5rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th, .data-table td {
+            padding: 1.1rem 1rem; /* Polishing: Slightly more vertical padding */
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background-color: var(--background-color);
+            font-weight: 600;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: rgba(0, 121, 107, 0.05); /* Hover based on primary color */
+        }
+
+        .btn {
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem; /* Polishing: Slightly larger buttons */
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex; /* Polishing: Use flex for icon alignment */
+            align-items: center;
+            gap: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary { background-color: var(--primary-color); }
+        .btn-secondary { background-color: var(--secondary-color); }
+        .btn-success { background-color: var(--success-color); }
+        .btn-danger { background-color: var(--error-color); }
+
+        .badge {
+            padding: 0.4em 0.8em; /* Polishing: Slightly larger badges */
+            border-radius: 4px;
+            font-weight: 600;
+            line-height: 1.2;
+            color: white;
+        }
+
+        .badge-success { background-color: var(--success-color); }
+        .badge-warning { background-color: var(--warning-color); }
+        .badge-danger { background-color: var(--error-color); }
+        .badge-info { background-color: var(--primary-color); }
+        .badge-secondary { background-color: var(--secondary-color); }
+        
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.4rem; /* Polishing: Slightly larger icons */
+            margin-left: 0.75rem;
+            transition: color 0.2s;
+        }
+
+        .icon-btn:hover {
+            color: var(--primary-color);
+        }
+
+        /* [SHARED CSS BLOCK END] */
+
+        /* ASSIGNMENTS SPECIFIC STYLES */
+        .assignment-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem; /* Polishing: Increased margin */
+        }
+        
+        .action-cell .btn {
+            margin-right: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Polishing: Darker overlay */
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 3rem; /* Polishing: Increased modal padding */
+            border-radius: 10px;
+            width: 90%;
+            max-width: 700px; /* Polishing: Wider modal */
+            box-shadow: var(--shadow);
+            color: var(--text-color);
+            max-height: 90vh; /* Polishing: Restrict height */
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem; /* Polishing: Increased bottom padding */
+        }
+        
+        .modal-header h3 {
+            font-size: 1.5rem;
+        }
+        
+        .form-control {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: border-color 0.2s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="app-container" data-theme="light">
+        <aside class="sidebar">
+            <div class="logo-section"><h2>Engg Portal</h2></div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html" id="nav-dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li class="nav-item"><a href="profile.html" id="nav-profile"><i class="fas fa-user-circle"></i>Profile</a></li>
+                <li class="nav-item"><a href="classes.html" id="nav-classes"><i class="fas fa-chalkboard-teacher"></i>Classes</a></li>
+                <li class="nav-item"><a href="assignments.html" id="nav-assignments" class="active"><i class="fas fa-tasks"></i>Assignments</a></li>
+                <li class="nav-item"><a href="practicals.html" id="nav-practicals"><i class="fas fa-flask"></i>Practicals</a></li>
+                <li class="nav-item"><a href="attendance.html" id="nav-attendance"><i class="fas fa-calendar-check"></i>Attendance</a></li>
+                <li class="nav-item"><a href="reports.html" id="nav-reports"><i class="fas fa-chart-line"></i>Reports</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-navbar">
+                <div class="welcome-message">
+                    <h1>Assignments</h1>
+                    <span id="userRoleBadge" class="role-badge">Role</span>
+                </div>
+                <div class="action-group">
+                    <button id="themeToggle" class="icon-btn" title="Toggle Dark/Light Theme"><i class="fas fa-sun"></i></button>
+                    <button id="logoutBtn" class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+            
+            <div class="assignment-actions">
+                <h2>All Assignments</h2>
+                <button id="createAssignmentBtn" class="btn btn-primary" style="display: none;"><i class="fas fa-plus-circle"></i> Create New Assignment</button>
+            </div>
+            
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Subject</th>
+                                <th>Due Date</th>
+                                <th>Max Marks</th>
+                                <th id="tableHeaderStatus">Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assignmentsTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="markEntryModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modalAssignmentTitle">Mark Entries for Assignment Title</h3>
+                        <button class="icon-btn" onclick="document.getElementById('markEntryModal').classList.remove('active')"><i class="fas fa-times"></i></button>
+                    </div>
+                    <form id="saveMarksForm">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Roll No</th>
+                                        <th>Marks Obtained</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="marksEntryList">
+                                    </tbody>
+                            </table>
+                        </div>
+                        <div style="text-align: right; margin-top: 2rem;"> <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save Marks</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Create Assignment Modal -->
+            <div id="createAssignmentModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Create New Assignment</h3>
+                        <button class="icon-btn" onclick="document.getElementById('createAssignmentModal').classList.remove('active')"><i class="fas fa-times"></i></button>
+                    </div>
+                    <form id="createAssignmentForm">
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="assignmentTitle">Title</label>
+                            <input type="text" id="assignmentTitle" class="form-control" required style="width: 100%;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="assignmentDescription">Description</label>
+                            <textarea id="assignmentDescription" class="form-control" rows="3" style="width: 100%;"></textarea>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="assignmentClass">Class</label>
+                            <select id="assignmentClass" class="form-control" required style="width: 100%;"></select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="assignmentDueDate">Due Date</label>
+                            <input type="date" id="assignmentDueDate" class="form-control" required style="width: 100%;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="assignmentMaxMarks">Max Marks</label>
+                            <input type="number" id="assignmentMaxMarks" class="form-control" required min="1" style="width: 100%;">
+                        </div>
+                        <div style="text-align: right; margin-top: 2rem;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Create Assignment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Submit Assignment Modal -->
+            <div id="submitAssignmentModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="submitAssignmentTitle">Submit Assignment</h3>
+                        <button class="icon-btn" onclick="document.getElementById('submitAssignmentModal').classList.remove('active')"><i class="fas fa-times"></i></button>
+                    </div>
+                    <form id="submitAssignmentForm">
+                        <p>You are submitting: <strong id="assignmentNameToSubmit"></strong></p>
+                        <div class="form-group" style="margin-top: 1rem; margin-bottom: 1rem;">
+                            <label for="submissionNotes">Submission Notes (Optional)</label>
+                            <textarea id="submissionNotes" class="form-control" rows="4" style="width: 100%;"></textarea>
+                        </div>
+                        <div style="text-align: right; margin-top: 2rem;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Edit Assignment Modal -->
+            <div id="editAssignmentModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit Assignment</h3>
+                        <button class="icon-btn" onclick="document.getElementById('editAssignmentModal').classList.remove('active')"><i class="fas fa-times"></i></button>
+                    </div>
+                    <form id="editAssignmentForm">
+                        <input type="hidden" id="editAssignmentId">
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="editAssignmentTitle">Title</label>
+                            <input type="text" id="editAssignmentTitle" class="form-control" required style="width: 100%;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="editAssignmentDescription">Description</label>
+                            <textarea id="editAssignmentDescription" class="form-control" rows="3" style="width: 100%;"></textarea>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="editAssignmentClass">Class</label>
+                            <select id="editAssignmentClass" class="form-control" required style="width: 100%;"></select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="editAssignmentDueDate">Due Date</label>
+                            <input type="date" id="editAssignmentDueDate" class="form-control" required style="width: 100%;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="editAssignmentMaxMarks">Max Marks</label>
+                            <input type="number" id="editAssignmentMaxMarks" class="form-control" required min="1" style="width: 100%;">
+                        </div>
+                        <div style="text-align: right; margin-top: 2rem;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Database Manager -->
+    <script src="js/database.js"></script>
+    
+    <script>
+        // Database-connected functions
+        function getCurrentUser() {
+            return window.db ? window.db.getCurrentUser() : null;
+        }
+
+        function setupUserUI(user) {
+            document.getElementById('userRoleBadge').textContent = user.role === 'teacher' ? 'Teacher' : 'Student';
+        }
+        
+        function setActiveNavLink(page) {
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            const activeLink = document.getElementById(`nav-${page}`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+        
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const appContainer = document.querySelector('.app-container');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        
+        appContainer.setAttribute('data-theme', currentTheme);
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeToggle.querySelector('i').className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        
+        themeToggle.addEventListener('click', () => {
+            const newTheme = appContainer.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            appContainer.setAttribute('data-theme', newTheme);
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.querySelector('i').className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        });
+
+        // Logout Functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                window.db.logout();
+                window.location.href = 'main.html';
+            }
+        });
+        /* [SHARED JAVASCRIPT BLOCK END] */
+
+        // Database-connected data
+        let currentAssignmentData = [];
+        let currentAssignmentId = null; // Used by mark entry modal
+
+        function loadAssignmentsFromDB(user) {
+            if (!window.db || !window.db.data) return;
+
+            if (user.role === 'teacher') {
+                // Get assignments created by this teacher
+                currentAssignmentData = window.db.getAssignments();
+                currentAssignmentData = currentAssignmentData.filter(assignment => {
+                    const assignmentClass = window.db.getClassById(assignment.classId);
+                    return assignmentClass && assignmentClass.teacherId === user.id;
+                });
+            } else {
+                // Get assignments for student's classes
+                currentAssignmentData = window.db.getAssignments(null, user.id);
+            }
+
+            // Transform data to match expected format
+            currentAssignmentData = currentAssignmentData.map(assignment => {
+                const assignmentClass = window.db.getClassById(assignment.classId);
+                const submissionCount = assignment.submissions ? assignment.submissions.length : 0;
+                
+                return {
+                    id: assignment.id,
+                    title: assignment.title,
+                    subject: assignmentClass ? assignmentClass.name : 'Unknown',
+                    dueDate: assignment.dueDate,
+                    maxMarks: assignment.maxMarks,
+                    status: assignment.status,
+                    submissions: submissionCount,
+                    submissionData: assignment.submissions || [],
+                    classId: assignment.classId
+                };
+            });
+        }
+
+        // --- ASSIGNMENTS SPECIFIC FUNCTIONS ---
+
+        function getStatusBadge(status) {
+            let className;
+            let icon;
+            switch (status) {
+                case 'graded': className = 'badge-success'; icon = 'fas fa-check-circle'; break;
+                case 'pending': className = 'badge-warning'; icon = 'fas fa-hourglass-half'; break;
+                case 'due soon': className = 'badge-danger'; icon = 'fas fa-exclamation-circle'; break;
+                default: className = 'badge-secondary'; icon = 'fas fa-clock';
+            }
+            return `<span class="badge ${className}"><i class="${icon}"></i> ${status.toUpperCase()}</span>`;
+        }
+        
+        function getActionButtons(userRole, assignment) {
+            const user = getCurrentUser();
+            if (userRole === 'teacher') {
+                return `
+                    <button class="btn btn-secondary" onclick="openMarkEntry(${assignment.id})"><i class="fas fa-marker"></i> Mark</button>
+                    <button class="btn btn-secondary" onclick="editAssignment(${assignment.id})"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn btn-danger" onclick="deleteAssignment(${assignment.id})"><i class="fas fa-trash-alt"></i> Delete</button>
+                `;
+            } else {
+                // Check if student has submitted
+                const hasSubmission = assignment.submissionData.some(sub => sub.studentId === user.id);
+                const submission = assignment.submissionData.find(sub => sub.studentId === user.id);
+                
+                if (hasSubmission && submission.marks !== null) {
+                    return `
+                        <button class="btn btn-success" onclick="viewFeedback(${assignment.id})"><i class="fas fa-eye"></i> View Grade (${submission.marks}/${assignment.maxMarks})</button>
+                    `;
+                } else if (hasSubmission) {
+                    return `<span class="badge badge-info">Submitted - Pending Grade</span>`;
+                } else if (new Date(assignment.dueDate) > new Date()) {
+                    return `
+                        <button class="btn btn-primary" onclick="submitAssignment(${assignment.id})"><i class="fas fa-upload"></i> Submit</button>
+                    `;
+                } else {
+                    return `<span class="badge badge-danger">LATE</span>`;
+                }
+            }
+        }
+        
+        function renderAssignments(user) {
+            const tableBody = document.getElementById('assignmentsTableBody');
+            tableBody.innerHTML = '';
+            
+            // Adjust Table Header for Role
+            document.getElementById('tableHeaderStatus').textContent = user.role === 'teacher' ? 'Submissions' : 'Status / Grade';
+            document.getElementById('createAssignmentBtn').style.display = user.role === 'teacher' ? 'inline-flex' : 'none'; /* Changed to inline-flex for button alignment */
+
+            currentAssignmentData.forEach(assignment => {
+                const row = document.createElement('tr');
+                let statusCellContent;
+                
+                if (user.role === 'teacher') {
+                    const assignmentClass = window.db.getClassById(assignment.classId);
+                    const totalStudents = assignmentClass ? (assignmentClass.students ? assignmentClass.students.length : 0) : 0;
+                    statusCellContent = `${assignment.submissions} / ${totalStudents}`;
+                } else {
+                    const submission = assignment.submissionData.find(sub => sub.studentId === user.id);
+                    if (submission && submission.marks !== null) {
+                        statusCellContent = `<span class="badge badge-info">Grade: ${submission.marks}/${assignment.maxMarks}</span>`;
+                    } else if (submission) {
+                        statusCellContent = `<span class="badge badge-warning">Submitted</span>`;
+                    } else {
+                        statusCellContent = getStatusBadge(assignment.status);
+                    }
+                }
+                
+                row.innerHTML = `
+                    <td>${assignment.title}</td>
+                    <td>${assignment.subject}</td>
+                    <td>${assignment.dueDate}</td>
+                    <td>${assignment.maxMarks}</td>
+                    <td>${statusCellContent}</td>
+                    <td class="action-cell">${getActionButtons(user.role, assignment)}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // Teacher Function: Open Modal
+        function openMarkEntry(id) {
+            const assignment = currentAssignmentData.find(a => a.id === id);
+            currentAssignmentId = id;
+            if (!assignment) return;
+            
+            document.getElementById('modalAssignmentTitle').textContent = `Mark Entries for: ${assignment.title} (Max: ${assignment.maxMarks})`;
+            const marksEntryList = document.getElementById('marksEntryList');
+            marksEntryList.innerHTML = '';
+            
+            // Get students enrolled in this assignment's class
+            const assignmentClass = window.db.getClassById(assignment.classId);
+            if (!assignmentClass || !assignmentClass.students) {
+                alert('No students enrolled in this class.');
+                return;
+            }
+            
+            assignmentClass.students.forEach(studentId => {
+                const student = window.db.getUserById(studentId);
+                if (!student) return;
+                
+                const existingSubmission = assignment.submissionData.find(sub => sub.studentId === studentId);
+                const existingMarks = existingSubmission ? existingSubmission.marks || '' : '';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.rollNo}</td>
+                    <td><input type="number" min="0" max="${assignment.maxMarks}" value="${existingMarks}" data-studentid="${studentId}" class="form-control" style="width: 80px; display: inline-block;"></td>
+                `;
+                marksEntryList.appendChild(row);
+            });
+
+            document.getElementById('markEntryModal').classList.add('active');
+        }
+        
+        // Teacher Function: Save Marks from Modal
+        document.getElementById('saveMarksForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const markInputs = document.querySelectorAll('#marksEntryList input');
+            let hasChanges = false;
+            
+            markInputs.forEach(input => {
+                const studentId = parseInt(input.getAttribute('data-studentid'));
+                const marks = input.value.trim();
+                
+                if (marks !== '') {
+                    const marksNum = parseInt(marks);
+                    const assignment = window.db.getAssignmentById(currentAssignmentId);
+                    
+                    if (marksNum >= 0 && marksNum <= assignment.maxMarks) {
+                        // Grade the assignment in the database
+                        window.db.gradeAssignment(currentAssignmentId, studentId, marksNum, 'Graded by teacher');
+                        hasChanges = true;
+                    }
+                }
+            });
+
+            if (hasChanges) {
+                alert('Marks saved successfully!');
+                document.getElementById('markEntryModal').classList.remove('active');
+                loadAssignmentsFromDB(getCurrentUser());
+                renderAssignments(getCurrentUser());
+            } else {
+                alert('No valid marks entered.');
+            }
+        });
+        
+        // Student/Teacher Functions
+        function submitAssignment(id) {
+            const assignment = currentAssignmentData.find(a => a.id === id);
+            if (!assignment) return;
+
+            document.getElementById('assignmentNameToSubmit').textContent = assignment.title;
+            document.getElementById('submitAssignmentModal').classList.add('active');
+            
+            // Store the assignment ID for the form handler
+            document.getElementById('submitAssignmentForm').dataset.assignmentId = id;
+        }
+
+        document.getElementById('submitAssignmentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = getCurrentUser();
+            const assignmentId = parseInt(e.target.dataset.assignmentId);
+            const submissionNote = document.getElementById('submissionNotes').value;
+            const fileUrl = `/submissions/assignment${assignmentId}_${user.rollNo}_${Date.now()}.zip`;
+
+            const success = window.db.submitAssignment(assignmentId, user.id, {
+                fileUrl: fileUrl,
+                submissionNote: submissionNote || 'No submission notes.'
+            });
+
+            if (success) {
+                alert('Assignment submitted successfully!');
+                document.getElementById('submitAssignmentModal').classList.remove('active');
+                e.target.reset();
+                loadAssignmentsFromDB(user);
+                renderAssignments(user);
+            } else {
+                alert('Error submitting assignment. Please try again.');
+            }
+        });
+        
+        function viewFeedback(id) { 
+            const user = getCurrentUser();
+            const assignment = currentAssignmentData.find(a => a.id === id);
+            const submission = assignment.submissionData.find(sub => sub.studentId === user.id);
+            
+            if (submission && submission.marks !== null) {
+                alert(`Grade for ${assignment.title}:\nScore: ${submission.marks}/${assignment.maxMarks}\nFeedback: ${submission.feedback || 'No feedback provided'}`);
+            } else {
+                alert('No grade available yet.');
+            }
+        }
+        
+        function editAssignment(id) {
+            const assignment = window.db.getAssignmentById(id);
+            if (!assignment) return;
+            const user = getCurrentUser();
+
+            document.getElementById('editAssignmentId').value = assignment.id;
+            document.getElementById('editAssignmentTitle').value = assignment.title;
+            document.getElementById('editAssignmentDescription').value = assignment.description || '';
+            document.getElementById('editAssignmentDueDate').value = assignment.dueDate;
+            document.getElementById('editAssignmentMaxMarks').value = assignment.maxMarks;
+
+            const classSelect = document.getElementById('editAssignmentClass');
+            classSelect.innerHTML = '';
+            const teacherClasses = window.db.getClasses(user.id);
+            teacherClasses.forEach(cls => {
+                const opt = document.createElement('option');
+                opt.value = cls.id;
+                opt.textContent = cls.name;
+                if (cls.id === assignment.classId) opt.selected = true;
+                classSelect.appendChild(opt);
+            });
+
+            document.getElementById('editAssignmentModal').classList.add('active');
+        }
+
+        document.getElementById('editAssignmentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('editAssignmentId').value);
+            const updates = {
+                title: document.getElementById('editAssignmentTitle').value.trim(),
+                description: document.getElementById('editAssignmentDescription').value.trim(),
+                classId: parseInt(document.getElementById('editAssignmentClass').value),
+                dueDate: document.getElementById('editAssignmentDueDate').value,
+                maxMarks: parseInt(document.getElementById('editAssignmentMaxMarks').value)
+            };
+
+            const success = window.db.updateAssignment(id, updates);
+            if (success) {
+                alert('Assignment updated successfully!');
+                document.getElementById('editAssignmentModal').classList.remove('active');
+                const user = getCurrentUser();
+                loadAssignmentsFromDB(user);
+                renderAssignments(user);
+            } else {
+                alert('Error updating assignment.');
+            }
+        });
+
+        function deleteAssignment(id) {
+            const assignment = currentAssignmentData.find(a => a.id === id);
+            if (!assignment) return;
+
+            if (confirm(`Are you sure you want to delete the assignment "${assignment.title}"? This action is irreversible.`)) {
+                const success = window.db.deleteAssignment(id);
+                if (success) {
+                    alert('Assignment deleted successfully.');
+                    const user = getCurrentUser();
+                    loadAssignmentsFromDB(user);
+                    renderAssignments(user);
+                } else {
+                    alert('Error deleting assignment.');
+                }
+            }
+        }
+        
+        // --- Create Assignment Modal Logic ---
+        document.getElementById('createAssignmentBtn').addEventListener('click', () => {
+            const user = getCurrentUser();
+            const classSelect = document.getElementById('assignmentClass');
+            classSelect.innerHTML = '';
+            
+            const teacherClasses = window.db.getClasses(user.id);
+            teacherClasses.forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls.id;
+                option.textContent = cls.name;
+                classSelect.appendChild(option);
+            });
+            
+            document.getElementById('createAssignmentModal').classList.add('active');
+        });
+
+        document.getElementById('createAssignmentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = getCurrentUser();
+            
+            const newAssignment = {
+                title: document.getElementById('assignmentTitle').value,
+                description: document.getElementById('assignmentDescription').value,
+                classId: parseInt(document.getElementById('assignmentClass').value),
+                dueDate: document.getElementById('assignmentDueDate').value,
+                maxMarks: parseInt(document.getElementById('assignmentMaxMarks').value),
+                teacherId: user.id
+            };
+
+            const created = window.db.createAssignment(newAssignment);
+            if (created) {
+                alert('Assignment created successfully!');
+                document.getElementById('createAssignmentModal').classList.remove('active');
+                document.getElementById('createAssignmentForm').reset();
+                loadAssignmentsFromDB(user);
+                renderAssignments(user);
+            } else {
+                alert('Failed to create assignment.');
+            }
+        });
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for database to load
+            const initAssignments = () => {
+                if (!window.db || !window.db.data) {
+                    setTimeout(initAssignments, 100);
+                    return;
+                }
+
+                const user = getCurrentUser();
+                if (!user) {
+                    alert('Please log in to access the portal.');
+                    window.location.href = 'main.html';
+                    return;
+                }
+                
+                loadAssignmentsFromDB(user);
+                renderAssignments(user);
+                setupUserUI(user);
+                setActiveNavLink('assignments');
+            };
+
+            initAssignments();
+        });
+    </script>
+</body>
+</html>

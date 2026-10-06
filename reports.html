@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Engineering Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* [SHARED CSS BLOCK START] - POLISHED DEEP TEAL THEME */
+        :root {
+            /* Deep Teal & Soft Grey Theme */
+            --primary-color: #00796B; 
+            --secondary-color: #37474F; 
+            --background-color: #F0F4F8; 
+            --text-color: #263238; 
+            --card-bg: #ffffff;
+            --border-color: #CFD8DC; 
+            --shadow: 0 6px 12px rgba(0,0,0,0.08); 
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --error-color: #F44336;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4DB6AC; 
+            --secondary-color: #1A1E20; 
+            --background-color: #263238; 
+            --text-color: #CFD8DC; 
+            --card-bg: #37474F; 
+            --border-color: #546E7A; 
+            --shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+        }
+
+        /* --- Application Layout (Sidebar/Main Content) --- */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+
+        .logo-section {
+            padding: 0 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item a {
+            display: flex; 
+            align-items: center;
+            padding: 0.85rem 1.5rem; 
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .nav-item a i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .nav-item a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item .active {
+            background-color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2.5rem; 
+            width: calc(100% - 250px);
+        }
+
+        /* --- Components & Utility Styles --- */
+        .top-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.25rem; 
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .welcome-message {
+            display: flex; 
+            align-items: baseline;
+            gap: 15px;
+        }
+        
+        .welcome-message h1 {
+            font-size: 2rem;
+            font-weight: 300;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 2rem; 
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th, .data-table td {
+            padding: 1.1rem 1rem; 
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background-color: var(--background-color);
+            font-weight: 600;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: rgba(0, 121, 107, 0.05); 
+        }
+
+        .btn {
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem; 
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex; 
+            align-items: center;
+            gap: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary { background-color: var(--primary-color); }
+        .btn-secondary { background-color: var(--secondary-color); }
+        .btn-success { background-color: var(--success-color); }
+        .btn-danger { background-color: var(--error-color); }
+
+        .badge {
+            padding: 0.4em 0.8em; 
+            border-radius: 4px;
+            font-weight: 600;
+            line-height: 1.2;
+            color: white;
+        }
+
+        .badge-success { background-color: var(--success-color); }
+        .badge-warning { background-color: var(--warning-color); }
+        .badge-danger { background-color: var(--error-color); }
+        .badge-info { background-color: var(--primary-color); }
+        .badge-secondary { background-color: var(--secondary-color); }
+        
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.4rem; 
+            margin-left: 0.75rem;
+            transition: color 0.2s;
+        }
+
+        .icon-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        .form-control {
+            padding: 0.7rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        /* [SHARED CSS BLOCK END] */
+
+        /* REPORTS SPECIFIC STYLES */
+        .report-filters {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .report-filters > label {
+            white-space: nowrap;
+        }
+        
+        .custom-date-range {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            display: none; /* Controlled by JS */
+        }
+        
+        .export-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+        
+        #reportChart {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            max-width: 100%;
+            height: 300px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="app-container" data-theme="light">
+        <aside class="sidebar">
+            <div class="logo-section"><h2>Engg Portal</h2></div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html" id="nav-dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li class="nav-item"><a href="profile.html" id="nav-profile"><i class="fas fa-user-circle"></i>Profile</a></li>
+                <li class="nav-item"><a href="classes.html" id="nav-classes"><i class="fas fa-chalkboard-teacher"></i>Classes</a></li>
+                <li class="nav-item"><a href="assignments.html" id="nav-assignments"><i class="fas fa-tasks"></i>Assignments</a></li>
+                <li class="nav-item"><a href="practicals.html" id="nav-practicals"><i class="fas fa-flask"></i>Practicals</a></li>
+                <li class="nav-item"><a href="attendance.html" id="nav-attendance"><i class="fas fa-calendar-check"></i>Attendance</a></li>
+                <li class="nav-item"><a href="reports.html" id="nav-reports" class="active"><i class="fas fa-chart-line"></i>Reports</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-navbar">
+                <div class="welcome-message">
+                    <h1>Academic Reports</h1>
+                    <span id="userRoleBadge" class="role-badge">Role</span>
+                </div>
+                <div class="action-group">
+                    <button id="themeToggle" class="icon-btn" title="Toggle Dark/Light Theme"><i class="fas fa-sun"></i></button>
+                    <button id="logoutBtn" class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="report-filters">
+                    <label for="reportType">Report Type:</label>
+                    <select id="reportType" class="form-control" style="max-width: 200px;">
+                        <option value="gpa">GPA Trend</option>
+                        <option value="attendance">Attendance Trend</option>
+                        <option value="subject">Subject Grades</option>
+                    </select>
+
+                    <label for="timePeriod">Period:</label>
+                    <select id="timePeriod" class="form-control" style="max-width: 150px;">
+                        <option value="current">Current Semester</option>
+                        <option value="annual">Last 1 Year</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                    
+                    <div id="customDateRange" class="custom-date-range">
+                        <input type="date" class="form-control">
+                        <span>to</span>
+                        <input type="date" class="form-control">
+                    </div>
+                </div>
+
+                <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                    <h3>Performance Visualization</h3>
+                    <button class="btn btn-primary" onclick="drawReportChart()"><i class="fas fa-chart-line"></i> Generate Chart</button>
+                </div>
+                
+                <div style="margin-top: 2rem; text-align: center;">
+                    <canvas id="reportChart" width="800" height="300"></canvas>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Detailed Report Table</h2>
+                <div class="table-responsive" style="margin-top: 1rem;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th id="tableHeader1">Parameter</th>
+                                <th id="tableHeader2">Value</th>
+                                <th id="tableHeader3">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTableBody">
+                            </tbody>
+                    </table>
+                </div>
+                <div class="export-actions">
+                    <button id="exportCsvBtn" class="btn btn-secondary"><i class="fas fa-file-csv"></i> Export CSV</button>
+                    <button id="exportJsonBtn" class="btn btn-secondary"><i class="fas fa-file-code"></i> Export JSON</button>
+                    <button id="printReportBtn" class="btn btn-secondary"><i class="fas fa-print"></i> Print Report</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Database Manager -->
+    <script src="js/database.js"></script>
+    
+    <script>
+        /* [SHARED JAVASCRIPT BLOCK START] */
+        function getCurrentUser() {
+            return window.db ? window.db.getCurrentUser() : null;
+        }
+
+        function setupUserUI(user) {
+            document.getElementById('userRoleBadge').textContent = user.role === 'teacher' ? 'Teacher' : 'Student';
+            // Reports page usually looks the same for both roles, just the data changes
+        }
+        
+        function setActiveNavLink(page) {
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            const activeLink = document.getElementById(`nav-${page}`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+        
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const appContainer = document.querySelector('.app-container');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        
+        appContainer.setAttribute('data-theme', currentTheme);
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeToggle.querySelector('i').className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        
+        themeToggle.addEventListener('click', () => {
+            const newTheme = appContainer.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            appContainer.setAttribute('data-theme', newTheme);
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.querySelector('i').className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        });
+
+        // Logout Functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                window.db.logout();
+                window.location.href = 'main.html';
+            }
+        });
+        /* [SHARED JAVASCRIPT BLOCK END] */
+
+        // DYNAMIC REPORT DATA
+        let reportsData = {
+            gpa: { labels: [], data: [], tables: [] },
+            attendance: { labels: [], data: [], tables: [] },
+            subject: { labels: [], data: [], tables: [] }
+        };
+
+        function generateReportsData(user) {
+            if (!window.db || !window.db.data) return;
+
+            if (user.role === 'student') {
+                // GPA Report
+                const grades = window.db.getGrades(user.id);
+                const classes = window.db.getClasses(null, user.id);
+                
+                reportsData.gpa = {
+                    labels: classes.map(c => c.code),
+                    data: grades.map(g => g.gpa || 3.5), // Default if no GPA calculated
+                    tables: [
+                        { Parameter: 'Overall GPA', Value: '3.6', Details: 'Above average' },
+                        { Parameter: 'Classes Enrolled', Value: classes.length.toString(), Details: 'Current semester' },
+                        { Parameter: 'Credits Completed', Value: (classes.length * 3).toString(), Details: 'Total credits' }
+                    ]
+                };
+
+                // Attendance Report
+                const attendanceStats = window.db.getStudentAttendanceStats(user.id);
+                const attendanceHistory = window.db.getAttendance();
+                
+                // Group by month
+                const monthlyAttendance = {};
+                attendanceHistory.forEach(att => {
+                    const record = att.records.find(r => r.studentId === user.id);
+                    if (record) {
+                        const month = new Date(att.date).toLocaleDateString('en', {month: 'short'});
+                        if (!monthlyAttendance[month]) {
+                            monthlyAttendance[month] = { present: 0, total: 0 };
+                        }
+                        monthlyAttendance[month].total++;
+                        if (record.status === 'present') {
+                            monthlyAttendance[month].present++;
+                        }
+                    }
+                });
+
+                const months = Object.keys(monthlyAttendance);
+                const monthlyPercentages = months.map(month => {
+                    const data = monthlyAttendance[month];
+                    return Math.round((data.present / data.total) * 100) || 0;
+                });
+
+                reportsData.attendance = {
+                    labels: months,
+                    data: monthlyPercentages,
+                    tables: [
+                        { Parameter: 'Overall Attendance', Value: `${attendanceStats.percentage}%`, Details: 'Current semester' },
+                        { Parameter: 'Classes Attended', Value: attendanceStats.present.toString(), Details: 'Total present' },
+                        { Parameter: 'Classes Missed', Value: attendanceStats.absent.toString(), Details: 'Total absent' }
+                    ]
+                };
+
+                // Subject Grades Report
+                const assignments = window.db.getAssignments(null, user.id);
+                const subjectGrades = {};
+                
+                assignments.forEach(assignment => {
+                    const classData = window.db.getClassById(assignment.classId);
+                    const submission = assignment.submissions.find(s => s.studentId === user.id);
+                    
+                    if (classData && submission && submission.marks !== null) {
+                        if (!subjectGrades[classData.code]) {
+                            subjectGrades[classData.code] = { total: 0, count: 0, name: classData.name };
+                        }
+                        subjectGrades[classData.code].total += (submission.marks / assignment.maxMarks) * 100;
+                        subjectGrades[classData.code].count++;
+                    }
+                });
+
+                const subjects = Object.keys(subjectGrades);
+                const subjectAvgs = subjects.map(code => {
+                    const grade = subjectGrades[code];
+                    return Math.round(grade.total / grade.count) || 0;
+                });
+
+                reportsData.subject = {
+                    labels: subjects,
+                    data: subjectAvgs,
+                    tables: subjects.map(code => {
+                        const avg = subjectAvgs[subjects.indexOf(code)];
+                        const grade = avg >= 90 ? 'A' : avg >= 80 ? 'B' : avg >= 70 ? 'C' : avg >= 60 ? 'D' : 'F';
+                        return {
+                            Parameter: subjectGrades[code].name,
+                            Value: grade,
+                            Details: `Grade ${avg}/100`
+                        };
+                    })
+                };
+            } else {
+                // Teacher view - show class statistics
+                const teacherClasses = window.db.getClasses(user.id);
+                const allAssignments = window.db.getAssignments();
+                
+                reportsData.gpa = {
+                    labels: teacherClasses.map(c => c.code),
+                    data: teacherClasses.map(() => Math.floor(Math.random() * 20) + 80), // Mock class averages
+                    tables: [
+                        { Parameter: 'Classes Teaching', Value: teacherClasses.length.toString(), Details: 'Current semester' },
+                        { Parameter: 'Total Students', Value: teacherClasses.reduce((acc, c) => acc + (c.students ? c.students.length : 0), 0).toString(), Details: 'Across all classes' },
+                        { Parameter: 'Assignments Created', Value: allAssignments.filter(a => teacherClasses.some(c => c.id === a.classId)).length.toString(), Details: 'Total assignments' }
+                    ]
+                };
+
+                reportsData.attendance = reportsData.gpa; // Same for simplicity
+                reportsData.subject = reportsData.gpa;
+            }
+        }
+
+        // --- REPORTS SPECIFIC FUNCTIONS ---
+
+        function drawReportChart() {
+            const reportType = document.getElementById('reportType').value;
+            const reportData = reportsData[reportType];
+            
+            if (!reportData) return;
+
+            const canvas = document.getElementById('reportChart');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 30;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Get colors from CSS variables
+            const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
+            const secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color');
+            const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
+            
+            ctx.fillStyle = primaryColor;
+            ctx.strokeStyle = textColor;
+            ctx.lineWidth = 1;
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+            const barWidth = 40;
+            const spacing = (chartWidth - reportData.data.length * barWidth) / (reportData.data.length + 1);
+            
+            const maxValue = reportType === 'gpa' ? 4.0 : 100;
+            
+            // Draw axes
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, height - padding);
+            ctx.lineTo(width - padding, height - padding);
+            ctx.stroke();
+
+            // Draw bars
+            reportData.data.forEach((value, i) => {
+                // Normalize value for bar height
+                const normalizedValue = reportType === 'gpa' ? (value / 4.0) : (value / 100);
+                const barHeight = normalizedValue * (chartHeight - 10); // leave a small gap at top
+                
+                const x = padding + spacing + i * (barWidth + spacing);
+                const y = height - padding - barHeight;
+                
+                ctx.fillStyle = primaryColor;
+                ctx.fillRect(x, y, barWidth, barHeight);
+                
+                // Draw value label
+                ctx.fillStyle = textColor;
+                ctx.fillText(value.toFixed(reportType === 'gpa' ? 1 : 0), x + barWidth / 2, y - 5);
+                
+                // Draw label
+                ctx.fillText(reportData.labels[i], x + barWidth / 2, height - padding + 15);
+            });
+            
+            // Draw Y-axis labels (Mock)
+            ctx.textAlign = 'right';
+            ctx.fillText(maxValue, padding - 5, padding + 5);
+            ctx.fillText(maxValue / 2, padding - 5, height - padding - chartHeight / 2);
+            ctx.fillText(0, padding - 5, height - padding + 5);
+            
+            renderReportTable(reportData);
+        }
+
+        function renderReportTable(reportData) {
+             const tableBody = document.getElementById('reportTableBody');
+             tableBody.innerHTML = '';
+             
+             const type = document.getElementById('reportType').value;
+
+             // Adjust table headers
+             if (type === 'subject') {
+                 document.getElementById('tableHeader1').textContent = 'Subject';
+                 document.getElementById('tableHeader2').textContent = 'Final Grade';
+                 document.getElementById('tableHeader3').textContent = 'Score Details';
+             } else {
+                 document.getElementById('tableHeader1').textContent = 'Parameter';
+                 document.getElementById('tableHeader2').textContent = 'Value';
+                 document.getElementById('tableHeader3').textContent = 'Details';
+             }
+
+             reportData.tables.forEach(row => {
+                 const tr = document.createElement('tr');
+                 // Use consistent object property names for table cells
+                 tr.innerHTML = `
+                     <td>${row.Parameter}</td>
+                     <td>${row.Value}</td>
+                     <td>${row.Details}</td>
+                 `;
+                 tableBody.appendChild(tr);
+             });
+        }
+
+        // Export functionality
+        document.getElementById('exportCsvBtn').addEventListener('click', () => {
+            const reportType = document.getElementById('reportType').value;
+            const reportData = reportsData[reportType];
+            if (!reportData || !reportData.tables || reportData.tables.length === 0) {
+                alert('No report data available to export.');
+                return;
+            }
+            
+            const headers = ['Parameter', 'Value', 'Details'];
+            const rows = [headers.join(',')];
+            reportData.tables.forEach(row => {
+                const escaped = [
+                    `"${(row.Parameter || '').replace(/"/g, '""')}"`,
+                    `"${(row.Value || '').replace(/"/g, '""')}"`,
+                    `"${(row.Details || '').replace(/"/g, '""')}"`
+                ];
+                rows.push(escaped.join(','));
+            });
+
+            const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `report_${reportType}_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('exportJsonBtn').addEventListener('click', () => {
+            const reportType = document.getElementById('reportType').value;
+            const reportData = reportsData[reportType];
+            if (!reportData) {
+                alert('No report data available to export.');
+                return;
+            }
+
+            const exportObj = {
+                reportType: reportType,
+                generatedAt: new Date().toISOString(),
+                user: getCurrentUser() ? getCurrentUser().name : 'Unknown',
+                data: reportData
+            };
+
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `report_${reportType}_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('printReportBtn').addEventListener('click', () => {
+            window.print();
+        });
+
+        // Show/hide custom date range
+        document.getElementById('timePeriod').addEventListener('change', function() {
+            const customRange = document.getElementById('customDateRange');
+            if (this.value === 'custom') {
+                customRange.style.display = 'flex';
+            } else {
+                customRange.style.display = 'none';
+            }
+        });
+        
+        // Change report type
+        document.getElementById('reportType').addEventListener('change', function() {
+            drawReportChart(); // Redraw chart and table for new report type
+        });
+
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for database to load
+            const initReports = () => {
+                if (!window.db || !window.db.data) {
+                    setTimeout(initReports, 100);
+                    return;
+                }
+
+                const user = getCurrentUser();
+                if (!user) {
+                    alert('Please log in to access the portal.');
+                    window.location.href = 'main.html';
+                    return;
+                }
+                
+                generateReportsData(user);
+                setupUserUI(user);
+                setActiveNavLink('reports');
+                
+                // Ensure chart is drawn on load
+                drawReportChart();
+            };
+
+            initReports();
+        });
+    </script>
+</body>
+</html>
